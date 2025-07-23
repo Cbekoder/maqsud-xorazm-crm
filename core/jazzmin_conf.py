@@ -6,7 +6,7 @@ JAZZMIN_SETTINGS: dict = {
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "Admin Site Brand",
     # Logo to use for your site, must be present in static files, used for brand on top left
-    # "site_logo": "assets/img/admin-logo.png",
+    # "site_logo": "assets/img/managers-logo.png",
     # "login_logo": "assets/img/site-logo.png",
     # "login_logo_dark": "assets/img/site-logo.png",
     # CSS classes that are applied to the logo above
@@ -17,7 +17,7 @@ JAZZMIN_SETTINGS: dict = {
     "welcome_sign": "Welcome to Admin",
     # Copyright on the footer
     "copyright": "cbekoder",
-    # The model admin to search from the search bar, search bar omitted if excluded
+    # The model managers to search from the search bar, search bar omitted if excluded
     # "search_model": "",
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
@@ -29,7 +29,7 @@ JAZZMIN_SETTINGS: dict = {
         # Url that gets reversed (Permissions can be added)
         {
             "name": "Home",
-            "url": "admin:index",
+            "url": "managers:index",
             "permissions": ["auth.view_user"],
         },
         # external url that opens in a new window (Permissions can be added)
@@ -75,7 +75,7 @@ JAZZMIN_SETTINGS: dict = {
     #############
     # Relative paths to custom CSS/JS scripts (must be present in static files)
     # "custom_css": "assets/css/main.css",
-    # "custom_js": "assets/js/admin.js",
+    # "custom_js": "assets/js/managers.js",
     # Whether to show the UI customizer on the sidebar
     "show_ui_builder": True,
     ###############
@@ -94,7 +94,7 @@ JAZZMIN_SETTINGS: dict = {
         "auth.user": "collapsible",
         "auth.group": "vertical_tabs",
     },
-    # Add a language dropdown into the admin
+    # Add a language dropdown into the managers
     "language_chooser": False,
 }
 

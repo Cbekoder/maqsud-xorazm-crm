@@ -6,11 +6,12 @@ from django.urls import include, path
 from core.swagger.schema import swagger_urlpatterns
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/common/', include("apps.users.urls"))
+    path('managers/', admin.site.urls),
+    path('', include("apps.students.urls")),
+    path('users/', include("apps.users.urls"))
 ]
 
-urlpatterns += swagger_urlpatterns
+# urlpatterns += swagger_urlpatterns
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
