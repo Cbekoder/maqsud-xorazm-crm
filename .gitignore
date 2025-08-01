@@ -343,8 +343,8 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm+all
 
-/static/
-locale/
+#/static/
+#locale/
 
 ### macOS ###
 .DS_Store
