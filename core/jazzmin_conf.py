@@ -49,9 +49,9 @@ JAZZMIN_SETTINGS: dict = {
     "navigation_expanded": True,
     # Hide these apps when generating side menu e.g (auth)
     "hide_apps": [],
-    # Hide these models when generating side menu (e.g auth.user)
+    # Hide these Models when generating side menu (e.g auth.user)
     "hide_models": [],
-    # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
+    # List of apps (and/or Models) to base side menu ordering off of (does not need to contain all apps/Models)
     "order_with_respect_to": [
         # "common.Region",
     ],
