@@ -1,4 +1,4 @@
-from daff import View
+# from daff import View
 from django.shortcuts import render
 
 def BaseView(request):
