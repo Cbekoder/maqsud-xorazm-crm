@@ -10,3 +10,18 @@ def global_context(request):
         'FOOTER_YEAR': 2025,  # yoki dynamic bo‘lishi uchun datetime.now().year
         'DEBUG_MODE': settings.DEBUG,
     }
+
+
+def auth_user_notifications_context(request):
+    context = {
+        "user_notifications": [],
+        "user_notification_enabled": request.user.notification_enabled,
+    }
+
+    if request.user.is_authenticated:
+        context["user_notifications"] = request.user.user_notifications.filter(is_read=False, is_archived=False)
+
+    return context
+
+
+

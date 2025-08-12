@@ -17,6 +17,7 @@ ROLE_CHOICES = (
 class User(AbstractUser, BaseModel):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, verbose_name=_("Role"))
     phone = models.CharField(max_length=15, blank=True, null=True)
+    notification_enabled = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = _("User")
