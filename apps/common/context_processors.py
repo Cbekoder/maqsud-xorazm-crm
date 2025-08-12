@@ -13,15 +13,13 @@ def global_context(request):
 
 
 def auth_user_notifications_context(request):
-    user_notification_enabled = request.user.notification_enabled
     context = {
         "user_notifications": [],
-        "user_notification_enabled": user_notification_enabled,
+        "user_notification_enabled": request.user.notification_enabled,
     }
 
     if request.user.is_authenticated:
-        if user_notification_enabled:
-            context["user_notifications"] = request.user.user_notifications.filter(is_read=False, is_archived=False)
+        context["user_notifications"] = request.user.user_notifications.filter(is_read=False, is_archived=False)
 
     return context
 

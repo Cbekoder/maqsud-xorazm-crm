@@ -492,7 +492,7 @@
                    data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">notifications</i>
 
 <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
-                    {% if user_notifications|length != 0 %}
+                    {% if user_notifications|length != 0 and user_notification_enabled %}
 
                         <span class="badge-notify">
 
@@ -519,8 +519,7 @@
                                 <form action="{% url 'notifications_form_actions' %}" method="post" style="margin: 0;">
                                     {% csrf_token %}
 
-                                    {% if user_notification_enabled %}
-                                        {% if user_notifications|length != 0 %}
+                                    {% if user_notifications|length != 0 %}
                                         <button
                                             type="submit" name="action" value="archive-all-notifications"
                                             class="dropdown-item d-flex align-items-center gap-2 py-2"
@@ -536,8 +535,9 @@
                                             <i class="material-icons-outlined fs-6">done_all</i>
                                             Barchasi o'qildi
                                         </button>
-                                        {% endif %}
+                                    {% endif %}
 
+                                    {% if user_notification_enabled %}
                                         <button
                                                 type="submit" name="action" value="turn-off-user-notification"
                                                 class="dropdown-item d-flex align-items-center gap-2 py-2"
@@ -580,7 +580,7 @@
                         {% for user_notification in user_notifications %}
 
                             <div>
-                                <a class="dropdown-item border-bottom py-2">
+                                <a class="dropdown-item border-bottom py-2" href="/">
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="">
                                             <img src="https://placehold.co/110x110/png" class="rounded-circle" width="45"
