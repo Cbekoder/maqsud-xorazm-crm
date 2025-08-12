@@ -17,14 +17,11 @@ class LoginView(View):
         if user is not None:
             login(request, user)
 
-            # Get the next parameter from query string
             next_url = request.GET.get('next')
 
-            # If next parameter is provided and it's safe, redirect there
             if next_url and self._is_safe_url(next_url, request):
                 return redirect(next_url)
 
-            # Otherwise, redirect based on user role
             return self._redirect_by_role(user)
         else:
             messages.error(request, "Invalid username or password.")
@@ -35,14 +32,14 @@ class LoginView(View):
         """Redirect user to appropriate homepage based on their role"""
         role = user.role
 
-        if role == "managers":
-            return redirect('/managers/')  # Admin dashboard
-        elif role == "teachers":
-            return redirect('/teachers/')  # Teachers dashboard
-        elif role == "students":
-            return redirect('/')  # Students homepage (root URL)
+        if role == "manager":
+            return redirect('/manager/')  # Admin dashboard
+        elif role == "teacher":
+            return redirect('/teacher/')  # Teachers dashboard
+        elif role == "student":
+            return redirect('/student/')  # Students homepage (root URL)
         elif role == "parent":
-            return redirect('/parents/')  # Parents dashboard
+            return redirect('/parent/')  # Parents dashboard
         else:
             # Default fallback
             return redirect('/')
@@ -55,3 +52,9 @@ class LoginView(View):
             allowed_hosts={request.get_host()},
             require_https=request.is_secure(),
         )
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')

@@ -7,9 +7,9 @@ from apps.common.models import BaseModel
 
 
 ROLE_CHOICES = (
-    ("managers", _("Admin")),
-    ("teachers", _("Teacher")),
-    ("students", _("Student")),
+    ("manager", _("Manager")),
+    ("teacher", _("Teacher")),
+    ("student", _("Student")),
     ("parent", _("Parent")),
 )
 

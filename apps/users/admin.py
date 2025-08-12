@@ -19,6 +19,14 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ("is_active",)
     ordering = ("-id",)
 
+    fieldsets = BaseUserAdmin.fieldsets + (
+        ("Qo'shimcha ma'lumotlar", {"fields": ("role", "phone")}),
+    )
+
+    add_fieldsets = BaseUserAdmin.add_fieldsets + (
+        ("Qo'shimcha ma'lumotlar", {"fields": ("role", "phone")}),
+    )
+
 
 @admin.register(Notification)
 class NotificationModelAdmin(admin.ModelAdmin):
