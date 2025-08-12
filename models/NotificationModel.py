@@ -10,7 +10,6 @@ class Notification(models.Model):
 
     title = models.CharField(max_length=100)
     message = models.TextField(max_length=500)
-    is_read = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("Notification")
@@ -22,6 +21,8 @@ class Notification(models.Model):
 class UserNotification(models.Model):
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_notifications")
+    is_archived = models.BooleanField(default=False)
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("User Notification")

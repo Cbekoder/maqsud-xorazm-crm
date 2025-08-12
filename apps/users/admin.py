@@ -7,7 +7,7 @@ from models import User, Notification, UserNotification
 admin.site.unregister(Group)
 
 @admin.register(User)
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(BaseUserAdmin, admin.ModelAdmin):
     list_display = (
         "id",
         "username",
