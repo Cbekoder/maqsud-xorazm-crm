@@ -43,10 +43,10 @@
                         <p class="mb-0">Hisobingizga kiring</p>
 
                         <div class="form-body my-5">
-                            <form class="row g-3"> {% csrf_token %}
+                            <form class="row g-3" method="post"> {% csrf_token %}
                                 <div class="col-12">
                                     <label for="inputEmailAddress" class="form-label">Username</label>
-                                    <input name="username" type="email" class="form-control" id="inputEmailAddress"
+                                    <input name="username" type="text" class="form-control" id="inputEmailAddress"
                                            placeholder="">
                                 </div>
                                 <div class="col-12">

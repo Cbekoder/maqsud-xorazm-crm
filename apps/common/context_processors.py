@@ -9,6 +9,7 @@ def global_context(request):
         'SUPPORT_EMAIL': 'support@mycompany.uz',
         'FOOTER_YEAR': 2025,  # yoki dynamic bo‘lishi uchun datetime.now().year
         'DEBUG_MODE': settings.DEBUG,
+        'USER': request.user if request.user.is_authenticated else None,
     }
 
 

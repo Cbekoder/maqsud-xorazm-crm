@@ -71,14 +71,14 @@ class LoginView(View):
         """Redirect user to appropriate homepage based on their role"""
         role = user.role
 
-        if role == "managers":
-            return redirect('/managers/')  # Admin dashboard
-        elif role == "teachers":
-            return redirect('/teachers/')  # Teachers dashboard
-        elif role == "students":
-            return redirect('/')  # Students homepage (root URL)
+        if role == "manager":
+            return redirect('/manager/')  # Admin dashboard
+        elif role == "teacher":
+            return redirect('/teacher/')  # Teachers dashboard
+        elif role == "student":
+            return redirect('/student/')  # Students homepage (root URL)
         elif role == "parent":
-            return redirect('/parents/')  # Parents dashboard
+            return redirect('/parent/')  # Parents dashboard
         else:
             # Default fallback
             return redirect('/')
@@ -92,3 +92,8 @@ class LoginView(View):
             require_https=request.is_secure(),
         )
 
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
