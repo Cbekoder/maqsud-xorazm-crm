@@ -1,0 +1,31 @@
+.notify-close {
+    background: none;
+    border: none;
+    padding: 0
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+}
+
+/* Ensure the icon inside is always visible */
+.notify-close i {
+    font-size: 20px;
+    line-height: 1;
+    color: inherit;
+}
+
+/* Hover effect */
+.notify-close:hover {
+    color: #ff4d4d; /* Bright red on hover */
+    transform: scale(1.1);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Override Bootstrap's .dropdown-item hover effect */
+.dropdown-item:hover .notify-close,
+.dropdown-item:focus .notify-close {
+    color: #ccc; /* Keep original color, don't fade */
+}
