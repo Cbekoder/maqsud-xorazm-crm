@@ -34,12 +34,12 @@
     {% block extra_css %}
         <!-- Add your custom CSS here -->
     <!-- Add your custom CSS here -->
-        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        <link href="{% static 'css/common/base.css' %}" rel="stylesheet">
     {% endblock %}
 
 </head>
 
-<body style="background-image: url('/static/images/bg-themes/body-background-1.webp');">
+<body>
 
 <!--start header-->
 <header class="top-header">
@@ -626,16 +626,25 @@
                             <img src="https://placehold.co/110x110/png" class="rounded-circle p-1 shadow mb-3"
                                  width="90" height="90"
                                  alt="">
-                            <h5 class="user-name mb-0 fw-bold">Hello, Jhon</h5>
+                            <h5 class="user-name mb-0 fw-bold">
+                                {% if user.first_name and user.last_name %}
+                                    {{ user.first_name }} {{ user.last_name }}
+                                {% elif user.first_name %}
+                                    {{ user.first_name }}
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+
+                            </h5>
                         </div>
                     </a>
                     <hr class="dropdown-divider">
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'edit_auth_user_profile' %}"><i
-                            class="material-icons-outlined">person_outline</i>Profile</a>
+                            class="material-icons-outlined">person_outline</i>Profil</a>
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;"><i
-                            class="material-icons-outlined">local_bar</i>Setting</a>
+                            class="material-icons-outlined">local_bar</i>Sozlamalar</a>
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;"><i
-                            class="material-icons-outlined">dashboard</i>Dashboard</a>
+                            class="material-icons-outlined">dashboard</i>Boshqaruv Paneli</a>
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;"><i
                             class="material-icons-outlined">account_balance</i>Earning</a>
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;"><i
@@ -643,7 +652,7 @@
                     <hr class="dropdown-divider">
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;"
                        data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <i class="material-icons-outlined">power_settings_new</i>Logout
+                        <i class="material-icons-outlined">power_settings_new</i>Chiqish
                     </a>
                 </div>
             </li>
@@ -658,17 +667,17 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-bottom-0 py-2">
-                <h5 class="modal-title">Confirm Logout</h5>
+                <h5 class="modal-title">Chiqishni Tasdiqlash</h5>
                 <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
                     <i class="material-icons-outlined">close</i>
                 </a>
             </div>
             <div class="modal-body">
-                Are you sure you want to logout?
+                Siz akkauntingizdan chiqmoqchisiz, tasdiqlaysizmi?
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-grd-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="{% url 'logout' %}" class="btn btn-grd-danger">Logout</a>
+                <button type="button" class="btn btn-grd-secondary" data-bs-dismiss="modal">Orqaga</button>
+                <a href="{% url 'logout' %}" class="btn btn-grd-danger">Tasdiqlayman</a>
             </div>
         </div>
     </div>
@@ -692,7 +701,7 @@
         {% if USER.role == 'student' %}
             <ul class="metismenu" id="sidenav">
                 <li>
-                    <a href="/">
+                    <a href="{% url 'timetable' %}">
                         <div class="parent-icon"><i class="material-icons-outlined">schedule</i></div>
                         <div class="menu-title">Dars jadvali</div>
                     </a>
@@ -993,9 +1002,9 @@
                     </label>
                 </div>
                 <div class="col-12 col-xl-6">
-                    <input type="radio" class="btn-check" name="theme-options" id="BoderedTheme">
+                    <input type="radio" class="btn-check" name="theme-options" id="BorderedTheme">
                     <label class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
-                           for="BoderedTheme">
+                           for="BorderedTheme">
                         <span class="material-icons-outlined">border_style</span>
                         <span>Bordered</span>
                     </label>

@@ -1,5 +1,14 @@
 {% extends 'common/base.html' %}
 
+{% load static %}
+
+{% block extra_css %}
+
+<link href="{% static 'css/common/profile.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
 {% block content %}
 
       <!--start main wrapper-->
@@ -35,6 +44,22 @@
 
             <div class="card rounded-4">
               <div class="card-body p-4">
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-border-success alert-dismissible fade show">
+                          <div class="d-flex align-items-center">
+                            <div class="font-35 text-success">
+                              <span class="material-icons-outlined fs-2">check_circle</span>
+                            </div>
+                            <div class="ms-3">
+                              <h6 class="mb-0 text-success">Success</h6>
+                              <div class="">{{ message }}</div>
+                            </div>
+                          </div>
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                      {% endfor %}
+                    {% endif %}
                   <!--
                   ---------------------------------------- PROFILE PICTURES -----------------------------------------
 
@@ -45,20 +70,20 @@
                   </div>
                  </div>
                  -->
-                  <div class="profile-info pt-5 d-flex align-items-center justify-content-between">
+                  <div class="profile-info pt-5 d-flex align-items-center justify-content-between" id="profile-info-nav">
                     <div class="">
-                      <h3>Username: {{ user.username }}</h3>
+                      <h3>Username: {% if user.username %} {{ user.username }} {% else %} - {% endif %}</h3>
                       <p class="mb-0">
-                          Ism: {{ user.first_name }}
+                          Ism: {% if user.first_name %} {{ user.first_name }} {% else %} - {% endif %}
                       </p>
                       <p class="mb-0">
-                          Familiya: {{ user.last_name }}
+                          Familiya: {% if user.last_name %} {{ user.last_name }} {% else %} - {% endif %}
                       </p>
                       <p class="mb-0">
-                          Telefon Raqam: {{ user.phone }}
+                          Telefon Raqam: {% if user.phone %} {{ user.phone }} {% else %} - {% endif %}
                       </p>
                     </div>
-                    <div class="">
+                    <div class="align-self-start">
                       <a href="javascript:;" class="btn btn-grd-primary rounded-5 px-4"><i class="bi bi-chat me-2"></i>Xabar Yuborish</a>
                     </div>
                   </div>

@@ -9,4 +9,5 @@ urlpatterns = [
     path('schedule/', StudentScheduleView.as_view(), name='student_schedule'),
     path('progress/', StudentProgressView.as_view(), name='student_progress'),
     path('attendance/', StudentAttendanceView.as_view(), name='student_attendance'),
+    path('timetable/', views.StudentTimeTableView.as_view(), name='timetable'),
 ]

@@ -1,5 +1,6 @@
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 from apps.common.utils import RoleAccessMixin
 from apps.common.forms.profile_form import ProfileForm
@@ -16,3 +17,7 @@ class EditAuthUserProfileView(RoleAccessMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "Profil ma'lumotlari muoffaqiyatli o'zgartirildi!")
+        return super().form_valid(form)
