@@ -21,15 +21,14 @@
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                        </li>
+                        <li class="breadcrumb-item"><a href="/"></a></li>
                         <li class="breadcrumb-item active" aria-current="page">Calendar</li>
                     </ol>
                 </nav>
             </div>
             <div class="ms-auto">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-primary">Settings</button>
+                    <button type="button" class="btn btn-primary">Sozlamalar</button>
                     <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
@@ -50,66 +49,126 @@
             </div>
          </div>
 
+<!--        <div class="row">-->
+<!--            <div class="col-xl-12">-->
+<!--                <h6 class="mb-0 text-uppercase">Table head</h6>-->
+<!--                  <hr>-->
+<!--                  <div class="card">-->
+<!--                    <div class="card-body">-->
+
+<!--                      <table class="table mb-0">-->
+
+<!--                        <thead class="table-dark">-->
+<!--                          <tr>-->
+<!--                            <th scope="col">Sanasi</th>-->
+<!--                            <th scope="col">Vaqti</th>-->
+<!--                            <th scope="col">Fan</th>-->
+<!--                            <th scope="col">Mavzu</th>-->
+<!--                            <th scope="col">Link</th>-->
+<!--                            <th scope="col">Material</th>-->
+<!--                          </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                        &lt;!&ndash; group_lessons is a list of querysets &ndash;&gt;-->
+<!--                        {% for lessons in group_lessons %}-->
+
+<!--                            {% for lesson in lessons %}-->
+
+<!--                              <tr>-->
+<!--                                <th scope="row">{{ lesson.lesson_date }}</th>-->
+<!--                                <td>{{ lesson.start_time }} - {{ lesson.end_time }}</td>-->
+<!--                                <td>{{ lesson.lesson_name }}</td>-->
+<!--                                <td>{{ lesson.topic }}</td>-->
+<!--                                <td>-->
+<!--                                    {% if lesson.lesson_video_url %}-->
+<!--                                        <a href="?video={{ lesson.lesson_video_url|urlencode }}&lesson={{ lesson.id }}">videodarslik</a>-->
+<!--                                    {% else %}-->
+<!--                                        - -->
+<!--                                    {% endif %}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    {% if lesson.material %}-->
+<!--                                        <a href="{{ lesson.material.url }}" download class="text-decoration-none">-->
+<!--                                            <i class="bx bx-download font-20"></i>-->
+<!--                                        </a>-->
+<!--                                    {% else %}-->
+<!--                                        <span class="text-muted">—</span>-->
+<!--                                    {% endif %}-->
+<!--                                </td>-->
+<!--                              </tr>-->
+
+<!--                            {% endfor %}-->
+<!--                        {% endfor %}-->
+
+
+<!--                        </tbody>-->
+
+<!--                      </table>-->
+
+<!--                    </div>-->
+<!--                  </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="row">
-            <div class="col-xl-12">
-                <h6 class="mb-0 text-uppercase">Table head</h6>
-                  <hr>
-                  <div class="card">
-                    <div class="card-body">
+          <div class="col-xl-12">
+            <h6 class="mb-0 text-uppercase">Dars Jadvali</h6>
+            <hr>
+            <div class="card shadow-sm border-0 rounded-3">
+              <div class="card-body">
 
-                      <table class="table mb-0">
-
-                        <thead class="table-dark">
+                <!-- Responsive wrapper -->
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                      <tr>
+                        <th scope="col">Sanasi</th>
+                        <th scope="col">Vaqti</th>
+                        <th scope="col">Fan</th>
+                        <th scope="col">Mavzu</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Material</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for lessons in group_lessons %}
+                        {% for lesson in lessons %}
                           <tr>
-                            <th scope="col">Sanasi</th>
-                            <th scope="col">Vaqti</th>
-                            <th scope="col">Fan</th>
-                            <th scope="col">Mavzu</th>
-                            <th scope="col">Link</th>
-                            <th scope="col">Material</th>
+                            <td class="fw-semibold">{{ lesson.lesson_date }}</td>
+                            <td>{{ lesson.start_time }} - {{ lesson.end_time }}</td>
+                            <td>{{ lesson.lesson_name }}</td>
+                            <td>{{ lesson.topic }}</td>
+                            <td>
+                              {% if lesson.lesson_video_url %}
+                                <a href="?video={{ lesson.lesson_video_url|urlencode }}&lesson={{ lesson.id }}"
+                                   class="text-primary fw-semibold">
+                                  videodarslik
+                                </a>
+                              {% else %}
+                                <span class="text-muted">—</span>
+                              {% endif %}
+                            </td>
+                            <td>
+                              {% if lesson.material %}
+                                <a href="{{ lesson.material.url }}" download>
+                                  <i class="bx bx-download font-20"></i>
+                                </a>
+                              {% else %}
+                                <span class="text-muted">—</span>
+                              {% endif %}
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                        <!-- group_lessons is a list of querysets -->
-                        {% for lessons in group_lessons %}
-
-                            {% for lesson in lessons %}
-
-                              <tr>
-                                <th scope="row">{{ lesson.lesson_date }}</th>
-                                <td>{{ lesson.start_time }} - {{ lesson.end_time }}</td>
-                                <td>{{ lesson.lesson_name }}</td>
-                                <td>{{ lesson.topic }}</td>
-                                <td>
-                                    {% if lesson.lesson_video_url %}
-                                        <a href="?video={{ lesson.lesson_video_url|urlencode }}&lesson={{ lesson.id }}">videodarslik</a>
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if lesson.material %}
-                                        <a href="{{ lesson.material.url }}" download class="text-decoration-none">
-                                            <i class="bx bx-download font-20"></i>
-                                        </a>
-                                    {% else %}
-                                        <span class="text-muted">—</span>
-                                    {% endif %}
-                                </td>
-                              </tr>
-
-                            {% endfor %}
                         {% endfor %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
 
-
-                        </tbody>
-
-                      </table>
-
-                    </div>
-                  </div>
+              </div>
             </div>
+          </div>
         </div>
+
+
 
 
         {% if video_url %}
@@ -150,7 +209,7 @@
             navLinks: true, // can click day/week names to navigate views
             selectable: true,
             nowIndicator: true,
-            dayMaxEvents: true, // allow "more" link when too many events
+            dayMaxEvents: false, // allow "more" link when too many events
             editable: false,
             businessHours: true,
             events: events

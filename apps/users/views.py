@@ -97,3 +97,22 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('login')
+
+
+
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse, Http404
+
+
+def user_qr_image(request, pk: int):
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        raise Http404
+
+    img = qrcode.make(str(user.qr_token))          # encode only the token
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return HttpResponse(buf.getvalue(), content_type="image/png")
+
