@@ -18,7 +18,8 @@ class RoleAccessMixin(LoginRequiredMixin):
             return self.handle_no_permission()
 
         # If the user doesn't have the allowed role → redirect to their own dashboard
-        if request.user.role != self.allowed_role:
-            return redirect(ROLE_DASHBOARD_MAP.get(request.user.role, '/'))
+        if self.allowed_role is not None:
+            if request.user.role != self.allowed_role:
+                return redirect(ROLE_DASHBOARD_MAP.get(request.user.role, '/'))
 
         return super().dispatch(request, *args, **kwargs)
