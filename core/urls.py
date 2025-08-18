@@ -9,12 +9,12 @@ from core.swagger.schema import swagger_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lambda request: HttpResponseRedirect('/student/')),
+    path('', include("apps.common.urls")),
     path('student/', include("apps.students.urls")),
     path('teacher/', include("apps.teachers.urls")),
     path('manager/', include("apps.managers.urls")),
     path('parent/', include("apps.parents.urls")),
     path('users/', include("apps.users.urls")),
-    path('', include("apps.students.urls")),
     path('users/', include("apps.users.urls"))
 ]
 

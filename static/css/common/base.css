@@ -20,7 +20,7 @@
 /* Hover effect */
 .notify-close:hover {
     color: #ff4d4d; /* Bright red on hover */
-    transform: scale(1.1);
+    transform: scale(2);
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
