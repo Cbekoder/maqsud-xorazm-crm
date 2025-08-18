@@ -1,7 +1,7 @@
 from django.contrib import admin
 from apps.common.models import VersionHistory
 
-from models import Lesson, Group, UserGroups
+from models import Lesson, Group, UserGroups, Attendance
 
 
 @admin.register(VersionHistory)
@@ -27,3 +27,7 @@ class LessonModelAdmin(admin.ModelAdmin):
 class UserGroupsModelAdmin(admin.ModelAdmin):
     pass
 
+
+@admin.register(Attendance)
+class AttendanceModelAdmin(admin.ModelAdmin):
+    pass

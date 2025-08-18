@@ -15,7 +15,6 @@ urlpatterns = [
     path('manager/', include("apps.managers.urls")),
     path('parent/', include("apps.parents.urls")),
     path('users/', include("apps.users.urls")),
-    path('users/', include("apps.users.urls"))
 ]
 
 # urlpatterns += swagger_urlpatterns

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Scan Attendance — {{ lesson }}</title>
+  <!-- html5-qrcode (browser webcam QR) -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.10/minified/html5-qrcode.min.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    #reader { width: 420px; margin: 12px 0; }
+    .log { margin-top: 12px; max-height: 240px; overflow: auto; border: 1px solid #334; padding: 8px; border-radius: 8px; }
+    .ok { color: #13c26b; }
+    .warn { color: #f5a524; }
+    .err { color: #ff5b5b; }
+  </style>
+</head>
+<body>
+  <h2>Lesson: {{ lesson }}</h2>
+  <p>Point the camera at a student’s QR card.</p>
+
+  <div id="reader"></div>
+
+  <div class="log" id="log"></div>
+
+  <p>Scanned Student ID: <span id="scanned-result"></span></p>
+
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+        // Show the result
+        document.getElementById("scanned-result").innerText = decodedText;
+
+        // Send to backend (Django view) to mark attendance
+        fetch("/student/api/mark/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}",  // Django CSRF
+            },
+            body: JSON.stringify({
+                student_code: decodedText,
+                lesson_id: "{{ lesson.id }}"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Marked attendance:", data);
+        })
+        .catch(err => console.error("Error:", err));
+    }
+
+    function onScanFailure(error) {
+        // Ignore scanning errors
+        console.warn(`Scan error: ${error}`);
+    }
+
+    // Start scanner
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader",
+        { fps: 10, qrbox: 250 },
+        false
+    );
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+</body>
+</html>
