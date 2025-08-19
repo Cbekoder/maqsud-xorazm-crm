@@ -33,7 +33,7 @@
 
     {% block extra_css %}
         <!-- Add your custom CSS here -->
-    <!-- Add your custom CSS here -->
+        <!-- Add your custom CSS here -->
         <link href="{% static 'css/common/base.css' %}" rel="stylesheet">
     {% endblock %}
 
@@ -194,7 +194,13 @@
                     </li>
                 </ul>
             </li>
-
+            {% if USER.role == "student" %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="javascript:;" data-bs-toggle="modal" data-bs-target="#studentQRModal">
+                        <i class="material-icons-outlined">qr_code_2</i>
+                    </a>
+                </li>
+            {% endif %}
             <li class="nav-item dropdown position-static d-md-flex d-none">
                 <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-auto-close="outside"
                    data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">done_all</i></a>
@@ -342,7 +348,7 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item d-md-flex d-none">
                 <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-auto-close="outside"
                    data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">apps</i></a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-apps shadow-lg p-3">
@@ -492,7 +498,7 @@
                    data-bs-auto-close="outside"
                    data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">notifications</i>
 
-<!-- DTL HERE--------------------------------------------------------------------------------------------------------->
+                    <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
                     {% if user_notifications|length != 0 and user_notification_enabled %}
 
                         <span class="badge-notify">
@@ -515,16 +521,16 @@
                                   </span>
                             </button>
 
-<!-- DTL HERE--------------------------------------------------------------------------------------------------------->
+                            <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
                             <div class="dropdown-menu dropdown-option dropdown-menu-end shadow">
                                 <form action="{% url 'notifications_form_actions' %}" method="post" style="margin: 0;">
                                     {% csrf_token %}
 
                                     {% if user_notifications|length != 0 %}
                                         <button
-                                            type="submit" name="action" value="archive-all-notifications"
-                                            class="dropdown-item d-flex align-items-center gap-2 py-2"
-                                            style="border: none; background: none; width: 100%; text-align: left;">
+                                                type="submit" name="action" value="archive-all-notifications"
+                                                class="dropdown-item d-flex align-items-center gap-2 py-2"
+                                                style="border: none; background: none; width: 100%; text-align: left;">
                                             <i class="material-icons-outlined fs-6">inventory_2</i>
                                             Barchasini arxivga
                                         </button>
@@ -577,14 +583,15 @@
                         </div>
                     </div>
                     <div class="notify-list">
-<!-- DTL HERE--------------------------------------------------------------------------------------------------------->
+                        <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
                         {% for user_notification in user_notifications %}
 
                             <div>
                                 <a class="dropdown-item border-bottom py-2" href="/">
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="">
-                                            <img src="https://placehold.co/110x110/png" class="rounded-circle" width="45"
+                                            <img src="https://placehold.co/110x110/png" class="rounded-circle"
+                                                 width="45"
                                                  height="45" alt="">
                                         </div>
                                         <div class="">
@@ -593,7 +600,8 @@
                                             <p class="mb-0 notify-time">{{ user_notification.notification.created_at }}</p>
                                         </div>
                                         <div class="ms-auto notification-archive-div">
-                                            <form action="{% url 'archive_notification' user_notification.id %}" method="post">
+                                            <form action="{% url 'archive_notification' user_notification.id %}"
+                                                  method="post">
                                                 {% csrf_token %}
                                                 <button class="notify-close">
                                                     <i class="material-icons-outlined fs-6">close</i>
@@ -639,7 +647,8 @@
                         </div>
                     </a>
                     <hr class="dropdown-divider">
-                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'edit_auth_user_profile' %}"><i
+                    <a class="dropdown-item d-flex align-items-center gap-2 py-2"
+                       href="{% url 'edit_auth_user_profile' %}"><i
                             class="material-icons-outlined">person_outline</i>Profil</a>
                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;"><i
                             class="material-icons-outlined">local_bar</i>Sozlamalar</a>
@@ -718,6 +727,12 @@
                         <div class="menu-title">Davomat</div>
                     </a>
                 </li>
+                <li>
+                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#studentQRModal">
+                        <div class="parent-icon"><i class="material-icons-outlined">qr_code_2</i></div>
+                        <div class="menu-title">Mening QR Kodim</div>
+                    </a>
+                </li>
             </ul>
 
         {% elif USER.role == 'teacher' %}
@@ -763,10 +778,16 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/">
+                    <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon"><i class="material-icons-outlined">fact_check</i></div>
                         <div class="menu-title">Davomat</div>
                     </a>
+                    <ul>
+                      <li><a href="{% url 'qr_scanner' %}"><i class="material-icons-outlined">qr_code</i>QR Scanner</a>
+                      </li>
+                      <li><a href="#"><i class="material-icons-outlined">folder</i>Davomat hisoboti</a>
+                      </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="/">
@@ -951,6 +972,34 @@
 </div>
 <!--end cart-->
 
+{% if USER.role == "student" %}
+    <!--start qr-->
+    <div class="modal fade" id="studentQRModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3 text-center">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title">Sizning QR kodingiz</h5>
+
+                    <button type="button" class="btn btn-outline-dark btn-circle rounded-circle d-flex gap-2 wh-48" data-bs-dismiss="modal">
+                        <i class="material-icons-outlined">clear</i>
+                    </button>
+
+                </div>
+                <div class="modal-body d-flex flex-column align-items-center">
+                    <div id="student-qr"
+                         class="d-inline-block bg-white p-3 rounded shadow-sm">
+                    </div>
+                    <p class="mt-2">{{ USER.qr_token }}<br>Bu QR kodni kirishda va chiqishda ko'rsating.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end qr-->
+{% endif %}
+
+
+
+
 
 <!--start switcher-->
 
@@ -1035,6 +1084,35 @@
 <script>
     new PerfectScrollbar(".user-list")
 </script>
+{% if USER.role == "student" and USER.qr_token %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        (function () {
+            const modalEl = document.getElementById('studentQRModal');
+            if (!modalEl) return;
+
+            modalEl.addEventListener('shown.bs.modal', function () {
+                const box = document.getElementById('student-qr');
+                if (!box) return;
+
+                box.innerHTML = '';
+
+                new QRCode(box, {
+                    text: "{{ USER.qr_token }}",
+                    width: 290,
+                    height: 290,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            });
+
+            // optional: clear on hide
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                const box = document.getElementById('student-qr');
+                if (box) box.innerHTML = '';
+            });
+        })();
+    </script>
+{% endif %}
 
 {% block extra_js %}
 {% endblock %}

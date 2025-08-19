@@ -1,0 +1,175 @@
+{% extends "common/base.html" %}
+
+{% block content %}
+    <div class="d-flex flex-column align-items-center justify-content-between vh-100">
+
+        <!-- Camera view in center -->
+        {#  <div class="flex-grow-1 d-flex align-items-center justify-content-center w-100">#}
+        {#    <div id="scanner"#}
+        {#         class="border rounded shadow bg-dark d-flex align-items-center justify-content-center"#}
+        {#         style="width: 480px; height: 480px;">#}
+        {#      <span class="text-white">Camera not started</span>#}
+        {#    </div>#}
+        {#  </div>#}
+
+        <div id="qr-reader" style="width:600px; margin:auto;"></div>
+        <div id="notifications" class="position-fixed top-0 end-0 p-3" style="z-index:1050; width: 300px;"></div>
+
+        <!-- Bottom Buttons (no extra background) -->
+        <div class="w-100 fixed-bottom py-3 d-flex justify-content-center gap-3">
+            <!-- Web Camera button -->
+            <button id="scanBtn" type="button" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class="bi bi-camera-video"></i> Web Camera
+            </button>
+
+            <!-- QR Scanner button (disabled + badge) -->
+            <div class="position-relative">
+                <button type="button" class="btn btn-secondary d-flex align-items-center gap-2" disabled>
+                    <i class="bi bi-qr-code"></i> QR Scanner
+                </button>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+        soon
+      </span>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://unpkg.com/html5-qrcode" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let lastScanned = null;
+    let isProcessing = false;
+
+    // ✅ Notification system
+    function pushNotification(type, title, message, imageUrl = null) {
+        let container = document.getElementById("notifications");
+        if (!container) {
+            container = document.createElement("div");
+            container.id = "notifications";
+            container.style.position = "fixed";
+            container.style.top = "1rem";
+            container.style.right = "1rem";
+            container.style.zIndex = "9999";
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.gap = "0.75rem";
+            container.style.maxWidth = "320px";
+            document.body.appendChild(container);
+        }
+
+        const map = {
+            success: {bg: "bg-grd-success", icon: "check_circle"},
+            danger: {bg: "bg-grd-danger", icon: "dangerous"},
+            warning: {bg: "bg-grd-warning", icon: "warning_amber"},
+            info: {bg: "bg-grd-info", icon: "info"},
+            default: {bg: "bg-grd-primary", icon: "notifications"},
+        };
+        const cfg = map[type] || map.default;
+
+        const col = document.createElement("div");
+        col.className = "col";
+
+        const card = document.createElement("div");
+        card.className = "card p-2 rounded-4 cursor-pointer text-center";
+
+        const body = document.createElement("div");
+        body.className = `card-body ${cfg.bg} rounded-4 text-white`;
+
+        const flex = document.createElement("div");
+        flex.className = "d-flex flex-column gap-2";
+
+        const iconWrap = document.createElement("a");
+        iconWrap.href = "javascript:;";
+        iconWrap.className =
+            "mb-2 text-white rounded-circle d-flex align-items-center justify-content-center";
+
+        const icon = document.createElement("i");
+        icon.className = "material-icons-outlined fs-2";
+        icon.innerText = cfg.icon;
+        iconWrap.appendChild(icon);
+        flex.appendChild(iconWrap);
+
+        if (imageUrl) {
+            const img = document.createElement("img");
+            img.src = imageUrl;
+            img.alt = title;
+            img.className = "rounded-circle mx-auto mb-2";
+            img.style.width = "60px";
+            img.style.height = "60px";
+            img.style.objectFit = "cover";
+            flex.appendChild(img);
+        }
+
+        const h6 = document.createElement("h6");
+        h6.className = "mb-0";
+        h6.innerText = title;
+        flex.appendChild(h6);
+
+        if (message) {
+            const p = document.createElement("p");
+            p.className = "mb-0 small";
+            p.innerText = message;
+            flex.appendChild(p);
+        }
+
+        body.appendChild(flex);
+        card.appendChild(body);
+        col.appendChild(card);
+        container.appendChild(col);
+
+        setTimeout(() => {
+            col.remove();
+        }, 6000); // auto-remove after 1 min
+    }
+
+    // ✅ Handle QR result
+    async function checkScannedQR(uuid) {
+        try {
+            const resp = await fetch(`{% url "check_scanned_QR" %}?uuid=${uuid}`);
+            const data = await resp.json();
+
+            if (resp.ok) {
+                pushNotification(
+                    "success",
+                    data.name || "Student identified",
+                    "Checked successfully",
+                    data.image || null
+                );
+            } else {
+                pushNotification("danger", "Error", data.msg || "Invalid QR");
+            }
+        } catch (e) {
+            pushNotification("danger", "Network Error", "Could not check QR");
+        } finally {
+            isProcessing = false;
+        }
+    }
+
+    // ✅ Start QR camera
+    function onScanSuccess(decodedText) {
+        // Only process if different from last scanned
+        if (!isProcessing && decodedText !== lastScanned) {
+            lastScanned = decodedText;
+            isProcessing = true;
+            checkScannedQR(decodedText);
+        }
+    }
+
+    const html5QrCode = new Html5Qrcode("qr-reader");
+    Html5Qrcode.getCameras().then((devices) => {
+        if (devices && devices.length) {
+            html5QrCode.start(
+                {facingMode: "environment"},
+                {fps: 10, qrbox: 400},
+                onScanSuccess
+            );
+        } else {
+            pushNotification("danger", "Camera Error", "No camera found");
+        }
+    });
+});
+</script>
+{% endblock %}
