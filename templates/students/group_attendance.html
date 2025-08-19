@@ -1,0 +1,69 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block extra_css %}
+
+    <link href="{% static 'plugins/fullcalendar/css/main.min.css' %}" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="main-wrapper">
+    <div class="main-content">
+
+        <div class="row">
+          <div class="col-xl-12">
+            <h6 class="mb-0 text-uppercase">{{ group_name }} guruhning Davomat Jadvali</h6>
+            <h6 class="mb-0 text-uppercase">{{ test_dict.test }}</h6>
+            <hr>
+            <div class="card shadow-sm border-0 rounded-3">
+              <div class="card-body">
+
+                <!-- Responsive wrapper -->
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                      <tr>
+                        <th scope="col">Fan</th>
+                        <th scope="col">Sanasi</th>
+                        <th scope="col">Vaqti</th>
+                        <th scope="col">Davomat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for attendance in user_group_attendances %}
+                          <tr>
+                            <td>{{ attendance.lesson.lesson_name }}</td>
+                            <td class="fw-semibold">{{ attendance.lesson.lesson_date }}</td>
+                            <td>{{ attendance.lesson.start_time }} - {{ attendance.lesson.end_time }}</td>
+                            <td>
+                                {{ ATTENDANCE_STATUS_CHOICES_TRANSLATE|dict_get:attendance.status }}
+                            </td>
+
+                          </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+{% endblock %}
+

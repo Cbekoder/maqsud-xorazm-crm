@@ -12,7 +12,7 @@ class Attendance(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="attendances")
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="lesson_attendances")
     came_at = models.DateTimeField(blank=True, null=True)
     left_at = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=50, choices=ATTENDANCE_STATUS_CHOICES, default=ATTENDANCE_STATUS_CHOICES[0][0])

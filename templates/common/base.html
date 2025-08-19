@@ -713,10 +713,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/">
+                    <a class="has-arrow">
                         <div class="parent-icon"><i class="material-icons-outlined">how_to_reg</i></div>
                         <div class="menu-title">Davomat</div>
                     </a>
+                    {% if USER %}
+                        <ul>
+                            {% for user_group in user_groups %}
+                              <li>
+                                  <a href="{% url 'group_attendance' user_group.group.name %}">
+                                      {{ user_group.group.name }}
+                                  </a>
+                              </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </li>
             </ul>
 

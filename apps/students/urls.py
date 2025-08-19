@@ -13,4 +13,5 @@ urlpatterns = [
     # Attendance related
     path("scan/<int:lesson_id>/", attendance_view.scan_attendance, name="scan_attendance"),
     path("api/mark/", attendance_view.api_mark_attendance, name="api_mark_attendance"),
+    path("attendance/<str:group_name>/", attendance_view.StudentGroupAttendanceView.as_view(), name="group_attendance")
 ]

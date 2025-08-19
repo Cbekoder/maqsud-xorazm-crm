@@ -115,6 +115,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'apps.common.context_processors.global_context',
                 'apps.common.context_processors.auth_user_notifications_context',
+                'apps.common.context_processors.student_attendance_context',
             ],
         },
     },

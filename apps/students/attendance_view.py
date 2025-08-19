@@ -1,11 +1,13 @@
-# apps/attendance/views.py
 import json
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
 from models import Attendance, Lesson
+
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
 
@@ -52,6 +54,28 @@ def api_mark_attendance(request):
         return JsonResponse({"ok": True, "status": "already_marked", "student": student.get_full_name() or student.username})
 
 
+ATTENDANCE_STATUS_CHOICES_TRANSLATE = {
+    "Present": "Keldi",
+    "Absent": "Kelmadi",
+}
+class StudentGroupAttendanceView(LoginRequiredMixin, View):
+    login_url = "login"
 
+    def get(self, request, group_name):
+        user = request.user
+        if not user.user_groups.filter(group__name=group_name).exists():
+            raise Http404
+
+        user_group_attendances = user.attendances.all().filter(lesson__group__name=group_name)
+
+        return render(
+            request=request,
+            template_name="students/group_attendance.html",
+            context={
+                "group_name": group_name,
+                "user_group_attendances": user_group_attendances,
+                "ATTENDANCE_STATUS_CHOICES_TRANSLATE": ATTENDANCE_STATUS_CHOICES_TRANSLATE,
+            }
+        )
 
 

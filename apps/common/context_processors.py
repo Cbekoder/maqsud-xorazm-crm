@@ -26,5 +26,12 @@ def auth_user_notifications_context(request):
     return context
 
 
+def student_attendance_context(request):
+    context = {}
+
+    if request.user.is_authenticated and request.user.role == "student":
+        context["user_groups"] = request.user.user_groups.all()
+
+    return context
 
 
