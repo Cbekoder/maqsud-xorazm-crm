@@ -1,13 +1,16 @@
 from django.views import View
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.decorators.http import require_POST
 
 from models import UserNotification, User
+from apps.common.utils import RoleAccessMixin
+from apps.common.forms.profile_form import ProfileForm
 
 
 @login_required
@@ -99,20 +102,18 @@ class LogoutView(View):
         return redirect('login')
 
 
+# Create your views here.
+class EditAuthUserProfileView(RoleAccessMixin, UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = "users/profile.html"
+    success_url = reverse_lazy("edit_auth_user_profile")
+    context_object_name = "user"
 
-import qrcode
-from io import BytesIO
-from django.http import HttpResponse, Http404
+    def get_object(self, queryset=None):
+        return self.request.user
 
-
-def user_qr_image(request, pk: int):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        raise Http404
-
-    img = qrcode.make(str(user.qr_token))          # encode only the token
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    return HttpResponse(buf.getvalue(), content_type="image/png")
+    def form_valid(self, form):
+        messages.success(self.request, "Profil ma'lumotlari muoffaqiyatli o'zgartirildi!")
+        return super().form_valid(form)
 
