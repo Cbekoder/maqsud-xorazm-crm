@@ -19,6 +19,7 @@ ROLE_CHOICES = (
 class User(AbstractUser, BaseModel):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, verbose_name=_("Role"))
     phone = models.CharField(max_length=15, blank=True, null=True)
+    picture = models.ImageField(upload_to="user_pictures", blank=True, null=True)
     notification_enabled = models.BooleanField(default=True)
     qr_token = models.UUIDField(unique=True, editable=False, blank=True, null=True)
 
@@ -27,5 +28,10 @@ class User(AbstractUser, BaseModel):
         verbose_name_plural = _("Users")
 
         app_label = 'users'
+
+    def save(self, *args, **kwargs):
+        if not self.qr_token:
+            self.qr_token = uuid.uuid4()
+        super().save(*args, **kwargs)
 
 
