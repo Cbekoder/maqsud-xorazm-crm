@@ -380,3 +380,6 @@ Temporary Items
 
 celerybeat-schedule.db
 source_code.txt
+
+test.py
+

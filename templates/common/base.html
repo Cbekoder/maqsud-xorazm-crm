@@ -1,6 +1,6 @@
 <!doctype html>
 {% load static %}
-<html lang="en" data-bs-theme="blue-theme">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -30,6 +30,8 @@
     <link href="{% static 'sass/semi-dark.css' %}" rel="stylesheet">
     <link href="{% static 'sass/bordered-theme.css' %}" rel="stylesheet">
     <link href="{% static 'sass/responsive.css' %}" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/extra-icons.css' %}">
 
     {% block extra_css %}
         <!-- Add your custom CSS here -->
@@ -39,7 +41,7 @@
 
 </head>
 
-<body>
+<body class="main-body">
 
 <!--start header-->
 <header class="top-header">
@@ -49,20 +51,9 @@
         </div>
         <div class="search-bar flex-grow-1">
             <div class="position-relative">
-                <input class="form-control rounded-5 px-5 search-control d-lg-block d-none" type="text"
-                       placeholder="Search">
-                <span class="material-icons-outlined position-absolute d-lg-block d-none ms-3 translate-middle-y start-0 top-50">search</span>
                 <span class="material-icons-outlined position-absolute me-3 translate-middle-y end-0 top-50 search-close">close</span>
                 <div class="search-popup p-3">
                     <div class="card rounded-4 overflow-hidden">
-                        <div class="card-header d-lg-none">
-                            <div class="position-relative">
-                                <input class="form-control rounded-5 px-5 mobile-search-control" type="text"
-                                       placeholder="Search">
-                                <span class="material-icons-outlined position-absolute ms-3 translate-middle-y start-0 top-50">search</span>
-                                <span class="material-icons-outlined position-absolute me-3 translate-middle-y end-0 top-50 mobile-search-close">close</span>
-                            </div>
-                        </div>
                         <div class="card-body search-content">
                             <p class="search-title">Recent Searches</p>
                             <div class="d-flex align-items-start flex-wrap gap-2 kewords-wrapper">
@@ -155,11 +146,8 @@
             </div>
         </div>
         <ul class="navbar-nav gap-1 nav-right-links align-items-center">
-            <li class="nav-item d-lg-none mobile-search-btn">
-                <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">search</i></a>
-            </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="avascript:;"
+                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                    data-bs-toggle="dropdown"><img src="{% static 'images/county/02.png' %}" width="22" alt="">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -201,292 +189,7 @@
                     </a>
                 </li>
             {% endif %}
-            <li class="nav-item dropdown position-static d-md-flex d-none">
-                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-auto-close="outside"
-                   data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">done_all</i></a>
-                <div class="dropdown-menu dropdown-menu-end mega-menu shadow-lg p-4 p-lg-5">
-                    <div class="mega-menu-widgets">
-                        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4 g-lg-5">
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <div class="mega-menu-icon flex-shrink-0 bg-danger">
-                                                <i class="material-icons-outlined">question_answer</i>
-                                            </div>
-                                            <div class="mega-menu-content">
-                                                <h5>Marketing</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/02.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Website</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/03.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Subscribers</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/01.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Hubspot</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/11.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Templates</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/13.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Ebooks</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/12.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Sales</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/08.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Tools</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card rounded-4 shadow-none border mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <img src="{% static 'images/megaIcons/09.png' %}" width="40" alt="">
-                                            <div class="mega-menu-content">
-                                                <h5>Academy</h5>
-                                                <p class="mb-0 f-14">In publishing and graphic design, Lorem ipsum is a
-                                                    placeholder text commonly used to demonstrate
-                                                    the visual form of a document.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end row-->
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item d-md-flex d-none">
-                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-auto-close="outside"
-                   data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">apps</i></a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-apps shadow-lg p-3">
-                    <div class="border rounded-4 overflow-hidden">
-                        <div class="row row-cols-3 g-0 border-bottom">
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/01.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Gmail</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/02.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Skype</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/03.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Slack</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end row-->
 
-                        <div class="row row-cols-3 g-0 border-bottom">
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/04.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">YouTube</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/05.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Google</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/06.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Instagram</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end row-->
-
-                        <div class="row row-cols-3 g-0 border-bottom">
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/07.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Spotify</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/08.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Yahoo</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/09.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Facebook</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end row-->
-
-                        <div class="row row-cols-3 g-0">
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/10.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Figma</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col border-end">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/11.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Paypal</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="app-wrapper d-flex flex-column gap-2 text-center">
-                                    <div class="app-icon">
-                                        <img src="{% static 'images/apps/12.png' %}" width="36" alt="">
-                                    </div>
-                                    <div class="app-name">
-                                        <p class="mb-0">Photo</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end row-->
-                    </div>
-                </div>
-            </li>
             <li class="nav-item">
                 <a class="nav-link position-relative d-flex align-items-center gap-2"
                    data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" href="javascript:;">
@@ -498,7 +201,6 @@
                    data-bs-auto-close="outside"
                    data-bs-toggle="dropdown" href="javascript:;"><i class="material-icons-outlined">notifications</i>
 
-                    <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
                     {% if user_notifications|length != 0 and user_notification_enabled %}
 
                         <span class="badge-notify">
@@ -521,7 +223,6 @@
                                   </span>
                             </button>
 
-                            <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
                             <div class="dropdown-menu dropdown-option dropdown-menu-end shadow">
                                 <form action="{% url 'notifications_form_actions' %}" method="post" style="margin: 0;">
                                     {% csrf_token %}
@@ -583,7 +284,7 @@
                         </div>
                     </div>
                     <div class="notify-list">
-                        <!-- DTL HERE--------------------------------------------------------------------------------------------------------->
+
                         {% for user_notification in user_notifications %}
 
                             <div>
@@ -617,12 +318,7 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item d-md-flex d-none">
-                <a class="nav-link position-relative" data-bs-toggle="offcanvas" href="#offcanvasCart"><i
-                        class="material-icons-outlined">shopping_cart</i>
-                    <span class="badge-notify">8</span>
-                </a>
-            </li>
+
             <li class="nav-item dropdown">
                 <a href="javascrpt:;" class="dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
                     <img src="https://placehold.co/110x110/png" class="rounded-circle p-1 border" width="45" height="45"
@@ -710,15 +406,15 @@
         {% if USER.role == 'student' %}
             <ul class="metismenu" id="sidenav">
                 <li>
-                    <a href="{% url 'timetable' %}">
-                        <div class="parent-icon"><i class="material-icons-outlined">schedule</i></div>
-                        <div class="menu-title">Dars jadvali</div>
+                    <a href="/">
+                        <div class="parent-icon"><i class="material-icons-outlined">school</i></div>
+                        <div class="menu-title">O'quvchi Paneli</div>
                     </a>
                 </li>
                 <li>
-                    <a href="/">
-                        <div class="parent-icon"><i class="material-icons-outlined">school</i></div>
-                        <div class="menu-title">O'zlashtirish</div>
+                    <a href="{% url 'timetable' %}">
+                        <div class="parent-icon"><i class="material-icons-outlined">schedule</i></div>
+                        <div class="menu-title">Dars Jadvali</div>
                     </a>
                 </li>
                 <li>
@@ -726,17 +422,30 @@
                         <div class="parent-icon"><i class="material-icons-outlined">how_to_reg</i></div>
                         <div class="menu-title">Davomat</div>
                     </a>
-                    {% if USER %}
-                        <ul>
-                            {% for user_group in user_groups %}
-                              <li>
-                                  <a href="{% url 'group_attendance' user_group.group.name %}">
-                                      {{ user_group.group.name }}
-                                  </a>
-                              </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                    <ul>
+                        {% for user_group in USER.user_groups.all %}
+                          <li>
+                              <a href="{% url 'group_attendance' user_group.group.name %}">
+                                  {{ user_group.group.name }}
+                              </a>
+                          </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li id="lessons-menu">
+                    <a class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">school</i></div>
+                        <div class="menu-title">Darslarim</div>
+                    </a>
+                    <ul>
+                        {% for user_group in USER.user_groups.all %}
+                          <li>
+                              <a href="{% url 'lessons' user_group.group.name %}">
+                                  {{ user_group.group.name }}
+                              </a>
+                          </li>
+                        {% endfor %}
+                    </ul>
                 </li>
                 <li>
                     <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#studentQRModal">
@@ -749,22 +458,47 @@
         {% elif USER.role == 'teacher' %}
             <ul class="metismenu" id="sidenav">
                 <li>
-                    <a href="/">
+                    <a href="{% url 'teacher_timetable' %}">
                         <div class="parent-icon"><i class="material-icons-outlined">schedule</i></div>
                         <div class="menu-title">Dars jadvali</div>
                     </a>
+
                 </li>
                 <li>
-                    <a href="/">
+                    <a class="has-arrow">
                         <div class="parent-icon"><i class="material-icons-outlined">groups</i></div>
-                        <div class="menu-title">Guruhlar</div>
+                        <div class="menu-title">Guruhlarim</div>
                     </a>
+                    <ul>
+                        {% for teacher_group in USER.teacher_groups.all %}
+                          <li>
+                              <a href="{% url 'group_detail' teacher_group.group.name %}">
+                                  {{ teacher_group.group.name }}
+                              </a>
+                          </li>
+                        {% endfor %}
+                    </ul>
                 </li>
                 <li>
-                    <a href="/">
+                    <a class="has-arrow">
                         <div class="parent-icon"><i class="material-icons-outlined">person</i></div>
-                        <div class="menu-title">O'quvchilar</div>
+                        <div class="menu-title">O'quvchilarim</div>
                     </a>
+                    <ul>
+                      <li><a href="{% url 'all_students' %}">Barcha o'quvchilarim</a></li>
+                      <li>
+                          <a class="has-arrow">Guruh o'quvchilarim</a>
+                          <ul>
+                              {% for teacher_group in USER.teacher_groups.all %}
+                                  <li>
+                                      <a href="{% url 'group_students' teacher_group.group.name %}">
+                                          {{ teacher_group.group.name }}
+                                      </a>
+                                  </li>
+                              {% endfor %}
+                          </ul>
+                      </li>
+                    </ul>
                 </li>
             </ul>
 
@@ -837,9 +571,41 @@
 <!--end sidebar-->
 
 <!--start main wrapper-->
-{% block content %}
+<main class="main-wrapper">
+    <div class="main-content">
+        <div class="page-breadcrumb d-flex align-items-center mb-3">
+            <div class="">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0 d-flex align-items-center">
+                        <li class="pe-2">
+                            {% block breadcrumb_icon %}
+                                <i class="bx bx-home-alt"></i>
+                            {% endblock %}
+                        </li>
+                        <li class="breadcrumb-item active d-flex align-items-center" aria-current="page" style="font-size: clamp(0.9rem, 1.25vw, 3.5rem);">
+                            {% block breadcrumb_title %} Home {% endblock %}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="ms-auto">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Sozlamalar</button>
+                    <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                        <a class="dropdown-item" href="javascript:;">Another action</a>
+                        <a class="dropdown-item" href="javascript:;">Something else here</a>
+                        <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block subcontent %}
 
-{% endblock %}
+        {% endblock %}
+    </div>
+</main>
 <!--end main wrapper-->
 
 <!--start overlay-->

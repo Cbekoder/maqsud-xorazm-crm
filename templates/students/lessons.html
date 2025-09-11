@@ -1,7 +1,8 @@
 {% extends 'common/base.html' %}
 
 {% load static %}
-{% load custom_tags %}
+
+{% block title %} Darslar Ro'yhati {% endblock %}
 
 {% block extra_css %}
 
@@ -9,56 +10,106 @@
 
 
 {% block breadcrumb_icon %}
-    <i class="material-icons-outlined">event</i>
+    <i class="material-icons-outlined text-primary">menu_book</i>
 {% endblock %}
 
-{% block breadcrumb_title %} Davomat Jadval <br>{{ group_name }} {% endblock %}
+{% block breadcrumb_title %} Darslar Ro'yhati <br>{{ group_name }} {% endblock %}
 
 
 {% block subcontent %}
 
     <div class="row">
+
       <div class="col-xl-12">
+
         <div class="card shadow-sm border-0 rounded-3">
+
           <div class="card-body">
 
-            {% if user_group_attendances %}
+            <div class="table-responsive">
+              <h5>Keyingi Darsim 📌</h5>
+              <hr>
 
-                <!-- Responsive wrapper -->
-                <div class="table-responsive">
+              {% if next_lesson %}
                   <table class="table table-hover align-middle mb-0">
+
                     <thead class="table-dark">
                       <tr>
                         <th scope="col">Fan</th>
                         <th scope="col">Sanasi</th>
-                        <th scope="col">Dars Vaqti</th>
-                        <th scope="col">Davomat</th>
+                        <th scope="col">Vaqti</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {% for attendance in page_obj %}
-                          <tr>
-                            <td>{{ attendance.lesson.lesson_name }}</td>
-                            <td class="fw-semibold">{{ attendance.lesson.lesson_date }}</td>
-                            <td>{{ attendance.lesson.start_time }} - {{ attendance.lesson.end_time }}</td>
-                            <td>
-                                {{ ATTENDANCE_STATUS_CHOICES_TRANSLATE|get_item:attendance.status }}
-                                {% if attendance.status == "Absent" %}
-                                    <a type="button"
-                                       class="btn btn-outline-warning btn-sm px-20"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#BasicModal{{ attendance.id }}">
-                                        sababi
-                                    </a>
-                                {% endif %}
-                            </td>
 
-                          </tr>
-                      {% endfor %}
+                    <tbody>
+
+                        <tr>
+                          <td><a href="{% url 'lesson_detail' next_lesson.id %}">{{ next_lesson.lesson_name }}</a></td>
+                          <td class="fw-semibold">{{ next_lesson.lesson_date }}</td>
+                          <td>{{ next_lesson.start_time }} - {{ next_lesson.end_time }}</td>
+                        </tr>
+
                     </tbody>
+
+                  </table>
+              {% else %}
+
+                <p>Keyingi dars mavjud emas, ma'lumot uchun o'qituvchingizga murojaat qiling!</p>
+
+              {% endif %}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div class="col-xl-12">
+
+        <div class="card shadow-sm border-0 rounded-3">
+
+          <div class="card-body">
+
+            <div class="table-responsive">
+              <h5>O'tgan Darslarim</h5>
+              <hr>
+
+              {% if page_obj %}
+
+                  <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+                      <tr>
+                        <th scope="col">Fan</th>
+                        <th scope="col">Sanasi</th>
+                        <th scope="col">Vaqti</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                      {% for lesson in page_obj %}
+
+                            <tr>
+                              <td><a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.lesson_name }}</a></td>
+                              <td class="fw-semibold">{{ lesson.lesson_date }}</td>
+                              <td>{{ lesson.start_time }} - {{ lesson.end_time }}</td>
+                            </tr>
+
+                      {% endfor %}
+
+                    </tbody>
+
                   </table>
 
-                  {% if user_group_attendances|length > page_obj|length %}
+                  {% if group_lessons|length > page_obj|length %}
 
                       <nav aria-label="Page navigation example" style="padding-top: 20px">
 
@@ -107,57 +158,23 @@
                             {% endif %}
 
                         </ul>
-
                       </nav>
-
                   {% endif %}
+              {% else %}
 
-                </div>
+                  <p>O'tgan darslar mavjud emas!</p>
 
-            {% else %}
+              {% endif %}
 
-              <p class="mb-0 fw-bold">Davomat hali majvud emas!</p>
 
-            {% endif %}
-
+            </div>
 
           </div>
+
         </div>
+
       </div>
 
-        {% for attendance in page_obj %}
-            {% if attendance.status == "Absent" %}
-
-                <!-- Modals -->
-                <div class="modal fade" id="BasicModal{{ attendance.id }}">
-
-                  <div class="modal-dialog modal-dialog-centered">
-
-                    <div class="modal-content">
-
-                      <div class="modal-header border-bottom-0 py-2">
-                        <h5 class="modal-title"><b>Kelmaslik sababi</b></h5>
-                        <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
-                          <i class="material-icons-outlined">close</i>
-                        </a>
-                      </div>
-
-                      <div class="modal-body">
-                          {% if attendance.comment %}
-                            {{ attendance.comment }}
-                          {% else %}
-                            Sababsiz
-                          {% endif %}
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-            {% endif %}
-        {% endfor %}
     </div>
 
 {% endblock %}
@@ -165,6 +182,4 @@
 
 {% block extra_js %}
 
-
 {% endblock %}
-

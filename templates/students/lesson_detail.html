@@ -1,0 +1,144 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+
+{% block title %} Dars Ma'lumotlari  {% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block breadcrumb_icon %}
+    <i class="bx bx-info-circle" style="font-size: 200%;"></i>
+{% endblock %}
+
+{% block breadcrumb_title %}
+    Dars Ma'lumotlari
+{% endblock %}
+
+
+{% block subcontent %}
+  <div class="card">
+    <div class="card-body">
+      <div class="row row-cols-auto row-cols-2 g-3">
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6>📌 Fan</h6>
+            <p class="mb-0">{{ lesson.lesson_name }}</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="ps-3 pe-3 pt-4 pb-4 border border-primary text-end rounded bg-light">
+            <h6>📅 Sana</h6>
+            <p class="mb-0 fw-bold fst-italic" style="font-size: clamp(0.65rem, 1.5vw, 1.5rem);">{{ lesson.lesson_date }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 pt-3">
+        <div class="col-md-6 col-12">
+          <div class="p-4 border border-3 border-success rounded bg-light">
+            <h6>🕒 Boshlanish</h6>
+            <p class="mb-0">{{ lesson.start_time }}</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="p-4 border border-3 border-danger rounded bg-light">
+            <h6>🕔 Tugash</h6>
+            <p class="mb-0">{{ lesson.end_time }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-auto row-cols-1 g-3 pt-3">
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6>📖 Mavzu</h6>
+            {% if lesson.topic %}
+              <p class="mb-0">{{ lesson.topic }}</p>
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-auto row-cols-1 row-cols-lg-2 row-cols-md-1 g-3 pt-3">
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6 class="mb-3">📂 Sinf Materiallari</h6>
+
+            {% if class_materials %}
+              <div class="d-flex flex-wrap gap-1">
+                {% for material in class_materials %}
+                  <p style="font-size: 80%;">
+                    <a href="{{ material.material.url }}"
+                       download>
+                    {{ material.file_name }}
+                    </a>
+                    {% if not forloop.last %}| {% endif %}
+                  </p>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6 class="mb-3">📂 Uyga Vazifa Materiallari</h6>
+            {% if homework_materials %}
+              <div class="d-flex flex-wrap gap-1">
+                {% for material in homework_materials %}
+                  <p style="font-size: 80%;">
+                    <a href="{{ material.material.url }}"
+                       download>
+                    {{ material.file_name }}
+                    </a>
+                    {% if not forloop.last %}| {% endif %}
+                  </p>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!--end row-->
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title mb-3">
+        <h4>🎥 Video</h4>
+        <hr>
+      </div>
+      <div class="row" id="video-section">
+        {% if lesson_video_url_embed %}
+          <iframe width="560"
+                  height="315"
+                  src="{{ lesson_video_url_embed }}"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+          </iframe>
+        {% else %}
+          <p class="mb-0" style="color: #ED2939;">yuklanmagan</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+<script>
+    $(function () {
+        $('[data-bs-toggle="popover"]').popover();
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    })
+</script>
+
+{% endblock %}

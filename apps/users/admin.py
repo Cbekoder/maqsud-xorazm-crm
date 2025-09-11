@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.utils.html import format_html
-from models import User, Notification, UserNotification
+from models import User, Notification, UserNotification, StudentParent
 
 # unregister the default Group model
 admin.site.unregister(Group)
@@ -13,11 +13,11 @@ class UserAdmin(BaseUserAdmin, admin.ModelAdmin):
         "id",
         "username",
         "first_name",
-        "last_name",
+        "role",
         "photo_preview",   # ✅ show preview in list
     )
-    list_display_links = ("id", "username", "first_name", "last_name")
-    search_fields = ("id", "username", "first_name", "last_name")
+    list_display_links = ("id", "username", "first_name", "role")
+    search_fields = ("id", "username", "first_name", "role")
     list_filter = ("is_active",)
     ordering = ("-id",)
 
@@ -61,3 +61,14 @@ class NotificationModelAdmin(admin.ModelAdmin):
 @admin.register(UserNotification)
 class UserNotificationModelAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(StudentParent)
+class StudentParentModelAdmin(admin.ModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "student":
+            kwargs["queryset"] = User.objects.filter(role="student")
+        if db_field.name == "parent":
+            kwargs["queryset"] = User.objects.filter(role="parent")
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)

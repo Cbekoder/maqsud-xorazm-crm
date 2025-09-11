@@ -1,0 +1,145 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+
+{% block title %} Barcha O'quvchilarim {% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block breadcrumb_icon %}
+    <i class="fadeIn animated bx bx-list-ul" style="font-size: 200%;"></i>
+{% endblock %}
+
+{% block breadcrumb_title %}
+  Barcha O'quvchilarim
+{% endblock %}
+
+
+{% block subcontent %}
+
+    <div class="row">
+
+      <div class="col-xl-12">
+
+        <div class="card shadow-sm border-0 rounded-3">
+
+          <div class="card-body">
+
+            <div class="table-responsive">
+              <p class="mb-0">O'quvchilar Ro'yhati</p>
+              <hr>
+
+              {% if page_obj %}
+
+                  <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+                      <tr>
+                        <th scope="col">Ism</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Guruhi</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                      {% for student in page_obj %}
+
+                            <tr>
+                              <td>{% if student.first_name %} {{ student.first_name }} {% else %} - {% endif %}</td>
+                              <td class="fw-semibold">{{ student.username }}</td>
+                              <td>
+                                  {% for student_group in student.user_groups.all %}
+                                    {% if not forloop.last %}
+                                        {{ student_group.group.name }},<br>
+                                    {% else %}
+                                        {{ student_group.group.name }}
+                                    {% endif %}
+                                  {% endfor %}
+                              </td>
+                            </tr>
+
+                      {% endfor %}
+
+                    </tbody>
+
+                  </table>
+
+                  {% if students|length > page_obj|length %}
+
+                      <nav aria-label="Page navigation example">
+
+                        <ul class="pagination justify-content-center my-3">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                            {% else %}
+
+                                <li class="page-item disabled">
+                                    <a class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+
+                            {% endif %}
+
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <li class="page-item active">
+                                        <a class="page-link">{{ num }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                      </nav>
+                  {% endif %}
+              {% else %}
+
+                  <p class="mb-0 fw-bold text-warning">O'quvchilar mavjud emas!</p>
+
+              {% endif %}
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+{% endblock %}
+

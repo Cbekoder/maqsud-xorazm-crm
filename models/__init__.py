@@ -9,3 +9,6 @@ from .AttendanceModel import *
 from .GroupModel import *
 from .ExpenseModel import *
 
+from .CourseModel import Course
+from .RoomModel import Room
+

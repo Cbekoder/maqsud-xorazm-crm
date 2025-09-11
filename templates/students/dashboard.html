@@ -1,60 +1,54 @@
 {% extends 'common/base.html' %}
+{% load static %}
 
-{% block title %}Student Dashboard{% endblock %}
+{% block title %}O'quvchi Paneli{% endblock %}
 
-{% block content %}
-<main class="main-wrapper">
-    <div class="main-content">
-<!--        &lt;!&ndash;breadcrumb&ndash;&gt;-->
-<!--        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">-->
-<!--            <div class="breadcrumb-title pe-3">{% block section %}{% endblock %}</div>-->
-<!--            <div class="ps-3">-->
-<!--                <nav aria-label="breadcrumb">-->
-<!--                    <ol class="breadcrumb mb-0 p-0">-->
-<!--                        &lt;!&ndash;                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx-camera"></i></a>&ndash;&gt;-->
-<!--                        &lt;!&ndash;                        </li>&ndash;&gt;-->
-<!--                        <li class="breadcrumb-item active" aria-current="page">{% block section_item %}{% endblock %}-->
-<!--                        </li>-->
-<!--                    </ol>-->
-<!--                </nav>-->
-<!--            </div>-->
-<!--            <div class="ms-auto">-->
-<!--                <div class="btn-group">-->
-<!--                    <button type="button" class="btn btn-outline-primary">Settings</button>-->
-<!--                    <button type="button"-->
-<!--                            class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"-->
-<!--                            data-bs-toggle="dropdown"><span class="visually-hidden">Toggle Dropdown</span>-->
-<!--                    </button>-->
-<!--                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end"><a class="dropdown-item"-->
-<!--                                                                                           href="javascript:;">Action</a>-->
-<!--                        <a class="dropdown-item" href="javascript:;">Another action</a>-->
-<!--                        <a class="dropdown-item" href="javascript:;">Something else here</a>-->
-<!--                        <div class="dropdown-divider"></div>-->
-<!--                        <a class="dropdown-item" href="javascript:;">Separated link</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash;end breadcrumb&ndash;&gt;-->
-<!--        -->
-        <div class="page-wrapper">
-            <div class="page-content">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Student Dashboard</h4>
-                                <p class="card-text">Welcome to your student dashboard!</p>
-                            </div>
-                        </div>
+{% block breadcrumb_title %} O'quvchi Paneli {% endblock %}
+
+{% block subcontent %}
+
+    <div class="row pe-0">
+        <div class="col-xxl-8 d-flex align-items-stretch">
+          <div class="card w-100 overflow-hidden rounded-4">
+            <div class="card-body position-relative p-4">
+              <div class="row">
+                <div class="col-12 col-sm-7">
+                  <div class="d-flex align-items-center gap-3 mb-5">
+                    <img src="https://placehold.co/110x110/png" class="rounded-circle bg-grd-info p-1" width="60"
+                      height="60" alt="user">
+                    <div class="">
+                      <p class="mb-0 fw-semibold">Xush Kelibsiz</p>
+                      <h4 class="fw-semibold mb-0 fs-4 mb-0">{{ USER.first_name }}</h4>
                     </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-5">
+                    <div class="">
+                      <h4 class="mb-1 fw-semibold d-flex align-content-center">{{ pres_rate }}%<i
+                          class="ti ti-arrow-up-right fs-5 lh-base text-success"></i>
+                      </h4>
+                      <p class="mb-3">Umumiy Kelganlik Statistikasi</p>
+                      <div class="progress mb-0" style="height:5px;">
+                        <div class="progress-bar bg-grd-success" role="progressbar" style="width: {{ pres_rate }}%"
+                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="">
+                      <h4 class="mb-1 fw-semibold d-flex align-content-center">{{ abs_rate }}%<i
+                          class="ti ti-arrow-up-right fs-5 lh-base text-success"></i>
+                      </h4>
+                      <p class="mb-3">Umumiy Kelmaganlik Statistikasi</p>
+                      <div class="progress mb-0" style="height:5px;">
+                        <div class="progress-bar bg-grd-danger" role="progressbar" style="width: {{ abs_rate }}%" aria-valuenow="25"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div><!--end row-->
             </div>
+          </div>
         </div>
-
     </div>
-</main>
-
-
 
 {% endblock %}

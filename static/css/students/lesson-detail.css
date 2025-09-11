@@ -1,0 +1,133 @@
+:root {
+    /* Default (Light) Theme */
+    --body-bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --primary-color: #0d6efd;
+    --text-color: #212529;
+    --secondary-text: #6c757d;
+    --border-color: #e9ecef;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+body {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 12px var(--shadow-color) !important;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card-title, h4, h5 {
+    color: var(--text-color);
+}
+
+.text-secondary {
+    color: var(--secondary-text) !important;
+}
+
+.border-0 {
+    border: none !important;
+}
+
+.rounded-4 {
+    border-radius: 1.5rem !important;
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.info-label {
+    font-weight: 500;
+    color: var(--secondary-text);
+}
+
+.info-value {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* --- Dark Theme --- */
+.theme-dark {
+    --body-bg: #1e1e2d;
+    --card-bg: #27293d;
+    --text-color: #e9ecef;
+    --secondary-text: #adb5bd;
+    --border-color: #3e4453;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+}
+
+/* --- Lighter Dark Theme --- */
+.theme-lighter-dark {
+    --body-bg: #2b303a;
+    --card-bg: #343b48;
+    --text-color: #f1f3f5;
+    --secondary-text: #ced4da;
+    --border-color: #495057;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+}
+
+/* --- Blue Theme --- */
+.theme-blue {
+    --primary-color: #2196f3;
+    --text-color: #334e68;
+}
+.theme-blue .icon-circle,
+.theme-blue .info-icon {
+    color: var(--primary-color);
+}
+.theme-blue .icon-circle {
+    background-color: var(--primary-color);
+}
+
+/* --- Green Theme --- */
+.theme-green {
+    --primary-color: #4caf50;
+    --text-color: #386641;
+}
+.theme-green .icon-circle,
+.theme-green .info-icon {
+    color: var(--primary-color);
+}
+.theme-green .icon-circle {
+    background-color: var(--primary-color);
+}

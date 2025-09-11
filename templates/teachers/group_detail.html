@@ -1,0 +1,121 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+
+{% block title %} Dars Ma'lumotlari  {% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block breadcrumb_icon %}
+    <i class="bx bx-info-circle" style="font-size: 200%;"></i>
+{% endblock %}
+
+{% block breadcrumb_title %}
+  {{ group_name }}<br>Guruh Ma'lumotlari
+{% endblock %}
+
+
+{% block subcontent %}
+  <div class="card">
+    <div class="card-body">
+      <div class="row row-cols-auto row-cols-2 g-3 align-items-stretch">
+        <div class="col">
+          <div class="p-4 border rounded bg-light h-100 d-flex flex-column justify-content-top">
+            <h6>📌 Kurs</h6>
+            <p class="mb-0">{{ group.course.name }}</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="ps-3 pe-3 pt-4 pb-4 border border-primary text-end rounded bg-light h-100 d-flex flex-column justify-content-top">
+            <h6>📅 Muddat</h6>
+            {% if not group.start_date and not group.end_date %}
+              <p class="mb-0 fw-bold fst-italic">-</p>
+            {% else %}
+              <p class="mb-0 fw-bold fst-italic" style="font-size: clamp(0.6rem, 1.5vw, 1.1rem);">
+                {{ group.start_date }}dan
+              </p>
+              <p class="mb-0 fw-bold fst-italic" style="font-size: clamp(0.6rem, 1.5vw, 1.1rem);">
+                {{ group.end_date }}gacha
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 pt-3">
+        <div class="col">
+          <div class="p-4 border border-3 rounded bg-light">
+            <h6>Kunlar</h6>
+            <p class="mb-0">
+              {% if group.days == group.DaysChoices.ODD %}
+                Toq Kunlar
+              {% elif group.days == group.DaysChoices.EVEN %}
+                Juft Kunlar
+              {% elif group.days == group.DaysChoices.CUSTOM %}
+                {% for day in custom_days_uz %}
+                  {% if not forloop.last %}
+                    {{ day }},
+                  {% else %}
+                    {{ day }}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 pt-3">
+        <div class="col-md-6 col-12">
+          <div class="p-4 border border-3 border-success rounded bg-light">
+            <h6>🕒 Boshlanish vaqti</h6>
+            <p class="mb-0">{% if group.start_time %} {{ group.start_time }} {% else %} - {% endif %}</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="p-4 border border-3 border-danger rounded bg-light">
+            <h6>🕔 Tugash vaqti</h6>
+            <p class="mb-0">{% if group.end_time %} {{ group.end_time }} {% else %} - {% endif %}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 pt-3">
+        <div class="col">
+          <div class="p-4 border border-3 rounded bg-light">
+            <h6>Guruh Statusi</h6>
+            {% if group.status == group.StatusChoices.ACTIVE %}
+              <p class="mb-0 text-success">Aktiv</p>
+            {% elif group.status == group.StatusChoices.WAITING %}
+              <p class="mb-0 text-warning">Kutilyapti</p>
+            {% else %}
+              -
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 pt-3">
+        <div class="col-6 col-sm-6 col-md-6">
+          <div class="p-4 border border-3 rounded bg-light">
+            <h6>Dars Soni</h6>
+            <p class="mb-0">{{ group_lessons_count }}</p>
+          </div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-6">
+          <div class="p-4 border border-3 rounded bg-light">
+            <h6>O'quvchi Soni</h6>
+            <p class="mb-0">{{ student_count }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!--end row-->
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+{% endblock %}

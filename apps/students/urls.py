@@ -1,17 +1,15 @@
 from django.urls import path
-from .views import StudentHomeView, StudentScheduleView, StudentProgressView, StudentAttendanceView
+from .views import StudentHomeView, StudentProgressView
 
 from . import views, attendance_view
 
 
 urlpatterns = [
     path('', StudentHomeView.as_view(), name='StudentHome'),
-    path('schedule/', StudentScheduleView.as_view(), name='student_schedule'),
     path('progress/', StudentProgressView.as_view(), name='student_progress'),
-    path('attendance/', StudentAttendanceView.as_view(), name='student_attendance'),
     path('timetable/', views.StudentTimeTableView.as_view(), name='timetable'),
+    path('lessons/<str:group_name>/', views.StudentLessonsListView.as_view(), name='lessons'),
+    path('lesson-detail/<int:pk>/', views.StudentLessonDetailView.as_view(), name='lesson_detail'),
     # Attendance related
-    path("scan/<int:lesson_id>/", attendance_view.scan_attendance, name="scan_attendance"),
-    path("api/mark/", attendance_view.api_mark_attendance, name="api_mark_attendance"),
     path("attendance/<str:group_name>/", attendance_view.StudentGroupAttendanceView.as_view(), name="group_attendance")
 ]
