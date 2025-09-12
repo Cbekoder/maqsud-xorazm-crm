@@ -18,10 +18,11 @@ class StudentHomeView(RoleAccessMixin, View):
     # Returns {"pres_rate": pres_rate, "abs_rate": abs_rate}
     def calc_attendance_rates(self) -> dict:
         total_num = self.request.user.attendances.count()
-        pres_num = self.request.user.attendances.filter(status="Present").count()
-        abs_num = self.request.user.attendances.filter(status="Absent").count()
 
         if total_num:
+            pres_num = self.request.user.attendances.filter(status="Present").count()
+            abs_num = self.request.user.attendances.filter(status="Absent").count()
+
             pres_rate = round(pres_num / total_num * 100)
             abs_rate = round(abs_num / total_num * 100)
         else:
@@ -111,6 +112,15 @@ class StudentLessonDetailView(RoleAccessMixin, DetailView):
     model = Lesson
     template_name = "students/lesson_detail.html"
     context_object_name = "lesson"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        user = self.request.user
+
+        if not obj.group.user_groups.filter(user=user).exists():
+            raise Http404
+
+        return obj
 
     def convert_to_embed(self, url):
         if "youtube.com/watch" in url:

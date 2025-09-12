@@ -11,7 +11,7 @@ class Command(BaseCommand):
         user_group_exists = 0
         for n in range(3, 14):
             student = User.objects.get(username=f"student{n}")
-            group = Group.objects.get(pk=12)
+            group = Group.objects.get(pk=14)
 
             user_group, created = UserGroups.objects.get_or_create(
                 user=student,

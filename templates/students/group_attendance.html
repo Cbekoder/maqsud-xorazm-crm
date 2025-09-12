@@ -30,17 +30,15 @@
                     <thead class="table-dark">
                       <tr>
                         <th scope="col">Fan</th>
-                        <th scope="col">Sanasi</th>
-                        <th scope="col">Dars Vaqti</th>
                         <th scope="col">Davomat</th>
+                        <th scope="col">Dars Sanasi</th>
+                        <th scope="col">Dars Vaqti</th>
                       </tr>
                     </thead>
                     <tbody>
                       {% for attendance in page_obj %}
                           <tr>
-                            <td>{{ attendance.lesson.lesson_name }}</td>
-                            <td class="fw-semibold">{{ attendance.lesson.lesson_date }}</td>
-                            <td>{{ attendance.lesson.start_time }} - {{ attendance.lesson.end_time }}</td>
+                            <td>{{ attendance.lesson.group.lesson_name }}</td>
                             <td>
                                 {{ ATTENDANCE_STATUS_CHOICES_TRANSLATE|get_item:attendance.status }}
                                 {% if attendance.status == "Absent" %}
@@ -52,6 +50,8 @@
                                     </a>
                                 {% endif %}
                             </td>
+                            <td class="fw-semibold">{{ attendance.lesson.lesson_date }}</td>
+                            <td>{{ attendance.lesson.start_time }} - {{ attendance.lesson.end_time }}</td>
 
                           </tr>
                       {% endfor %}

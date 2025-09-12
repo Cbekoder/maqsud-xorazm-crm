@@ -36,17 +36,17 @@
                     <thead class="table-dark">
                       <tr>
                         <th scope="col">Fan</th>
-                        <th scope="col">Sanasi</th>
                         <th scope="col">Vaqti</th>
+                        <th scope="col">Sanasi</th>
                       </tr>
                     </thead>
 
                     <tbody>
 
                         <tr>
-                          <td><a href="{% url 'lesson_detail' next_lesson.id %}">{{ next_lesson.lesson_name }}</a></td>
-                          <td class="fw-semibold">{{ next_lesson.lesson_date }}</td>
+                          <td><a href="{% url 'lesson_detail' next_lesson.id %}">{{ next_lesson.group.lesson_name }}</a></td>
                           <td>{{ next_lesson.start_time }} - {{ next_lesson.end_time }}</td>
+                          <td class="fw-semibold">{{ next_lesson.lesson_date }}</td>
                         </tr>
 
                     </tbody>
@@ -88,8 +88,8 @@
                     <thead class="table-dark">
                       <tr>
                         <th scope="col">Fan</th>
-                        <th scope="col">Sanasi</th>
                         <th scope="col">Vaqti</th>
+                        <th scope="col">Sanasi</th>
                       </tr>
                     </thead>
 
@@ -98,9 +98,9 @@
                       {% for lesson in page_obj %}
 
                             <tr>
-                              <td><a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.lesson_name }}</a></td>
-                              <td class="fw-semibold">{{ lesson.lesson_date }}</td>
+                              <td><a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.group.lesson_name }}</a></td>
                               <td>{{ lesson.start_time }} - {{ lesson.end_time }}</td>
+                              <td class="fw-semibold">{{ lesson.lesson_date }}</td>
                             </tr>
 
                       {% endfor %}

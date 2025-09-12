@@ -82,6 +82,9 @@ class TeacherGroups(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="teacher_groups")
     date_joined = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return f"TeacherID {self.teacher.id} | {self.group.name}"
+
     class Meta:
         verbose_name = "Teacher Group"
         verbose_name_plural = "Teacher Groups"
