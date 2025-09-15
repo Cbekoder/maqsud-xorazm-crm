@@ -1,3 +1,11 @@
+"""
+Adding multiple lessons is <deprecated> since
+automation of lesson creation added
+
+Single item can be added through admin panel
+"""
+
+
 from django.core.management.base import BaseCommand
 from datetime import date, time, timedelta
 from models import Lesson, Group  # Update with your actual app name
@@ -6,14 +14,14 @@ from models import Lesson, Group  # Update with your actual app name
 class Command(BaseCommand):
     help = "Create lessons on specific weekdays (e.g., Tuesday, Thursday, Saturday)."
 
+    def add_arguments(self, parser):
+        parser.add_argument()
+
     def handle(self, *args, **options):
         # Settings
-        start_date = date(2025, 7, 24)  # Starting date
-        end_date = date(2025, 8, 24)    # Until this date
-        group = Group.objects.get(id=2)  # Select your group
-        start_time = time(12, 0)         # Lesson start time
-        end_time = time(13, 30)           # Lesson end time
-        lesson_name = "English"
+        start_date = date(2025, 9, 1)  # Starting date
+        end_date = date(2025, 9, 10)    # Until this date
+        group = Group.objects.get(id=14)  # Select your group
 
         # Weekdays we want → Tuesday=1, Thursday=3, Saturday=5
         target_weekdays = [0, 2, 4]
@@ -28,10 +36,9 @@ class Command(BaseCommand):
                 lesson, created = Lesson.objects.get_or_create(
                     group=group,
                     lesson_date=current_date,
-                    start_time=start_time,
+                    start_time=group.start_time,
                     defaults={
-                        "end_time": end_time,
-                        "lesson_name": lesson_name,
+                        "end_time": group.end_time,
                     }
                 )
 

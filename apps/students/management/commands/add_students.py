@@ -1,3 +1,10 @@
+"""
+
+Student list of students with same password and username and according to the pattern accordingly (studentN, StudentN)
+
+"""
+
+
 from django.core.management.base import BaseCommand
 
 from models import User
@@ -6,15 +13,23 @@ from models import User
 class Command(BaseCommand):
     help = "Create list of students"
 
+    def add_arguments(self, parser):
+        parser.add_argument("start_index", type=int)
+        parser.add_argument("end_index", type=int)
+
     def handle(self, *args, **options):
+        start_index = options["start_index"]
+        end_index = options["end_index"]
+
         student_created = 0
         student_exists = 0
-        for n in range(3, 14):
+        for n in range(start_index, end_index + 1):
             user, created = User.objects.get_or_create(
                 username=f"student{n}",
                 defaults={
                     "password": "Abc#12345",
                     "role": "student",
+                    "first_name": f"Student{n}",
                 }
             )
 
