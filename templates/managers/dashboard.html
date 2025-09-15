@@ -1,27 +1,29 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Manager Dashboard{% endblock %}
+{% block title %}Admin Paneli{% endblock %}
 
-{% block content %}
-<main class="main-wrapper">
-    <div class="main-content">
+{% block breadcrumb_icon %}
+    <i class="bi bi-bar-chart-line" style="font-size: 150%;"></i>
+{% endblock %}
 
-        <div class="page-wrapper">
-            <div class="page-content">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Manager Dashboard</h4>
-                                <p class="card-text">Welcome to your manager dashboard!</p>
-                            </div>
-                        </div>
+{% block breadcrumb_title %} Admin Paneli {% endblock %}
+
+{% block subcontent %}
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Manager Dashboard</h4>
+                        <p class="card-text">Welcome to your manager dashboard!</p>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-</main>
+</div>
+
 
 {% endblock %}

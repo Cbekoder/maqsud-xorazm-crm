@@ -63,7 +63,7 @@ class StudentTimeTableView(RoleAccessMixin, View):
 
             for lesson in lessons_qs:
                 lesson_json = {
-                    "title": f"{lesson.lesson_name} "
+                    "title": f"{lesson.group.lesson_name} "
                              f"[{lesson.start_time.strftime('%H:%M')}-{lesson.end_time.strftime('%H:%M')}]",
                     "start": lesson.lesson_date.strftime('%Y-%m-%d')
                 }
