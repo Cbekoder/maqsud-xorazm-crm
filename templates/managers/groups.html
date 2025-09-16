@@ -1,0 +1,73 @@
+{% extends "common/base.html" %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block breadcrumb_title %} Guruhlar {% endblock %}
+
+{% block subcontent %}
+
+<div class="row">
+
+  <div class="col-xl-12">
+
+    <div class="card shadow-sm border-0 rounded-3">
+
+      <div class="card-body">
+
+        <div class="table-responsive mb-2">
+          <p class="mb-0">Guruhlar Ro'yhati</p>
+          <hr>
+          {% if groups %}
+
+              <table class="table table-hover align-middle mb-5">
+
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Guruh</th>
+                    <th scope="col">Darslar</th>
+                    <th scope="col">Kurs</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  {% for group in groups %}
+
+                        <tr>
+                          <td>{{ forloop.counter }}</td>
+                          <td>{{ group.name }}</td>
+                          <td><a href="{% url 'manager_group_lessons' group.name %}">darslar</a></td>
+                          <td class="fw-semibold">{{ group.course.name }}</td>
+                        </tr>
+
+                  {% endfor %}
+
+                </tbody>
+
+              </table>
+
+
+          {% else %}
+
+              <p class="mb-0 fw-bold text-warning">Guruhlar mavjud emas!</p>
+
+          {% endif %}
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

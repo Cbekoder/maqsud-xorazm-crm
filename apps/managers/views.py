@@ -6,7 +6,10 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from apps.common.utils import RoleAccessMixin
-from apps.users.models import User
+
+from models import User, Attendance, Lesson, Group
+
+from datetime import datetime
 
 
 class ManagerHomeView(RoleAccessMixin, View):
@@ -16,47 +19,185 @@ class ManagerHomeView(RoleAccessMixin, View):
         return render(request, "managers/dashboard.html")
 
 
-class QRScannerView(RoleAccessMixin, TemplateView):
+class GroupListView(RoleAccessMixin, View):
     allowed_role = 'manager'
-    template_name = "managers/scanner.html"
+
+    def get(self, request):
+        context = {
+            "groups": Group.objects.all()
+        }
+
+        return render(request, "managers/groups.html", context)
 
 
-def check_scanned_QR(request):
-    token = request.GET.get("uuid")
+class GroupLessonsListView(RoleAccessMixin, View):
+    allowed_role = 'manager'
+
+    def get(self, request, group_name):
+        context = {}
+
+        group = Group.objects.get(name=group_name)
+        group_lessons = group.lessons.all()
+        context["group_lessons"] = group_lessons
+
+        return render(request, "managers/group-lessons.html", context)
+
+
+class EnterLessonAttendance(RoleAccessMixin, View):
+    allowed_role = 'manager'
+
+    def get(self, request, lesson_id):
+        context = {"lesson_id": lesson_id}
+
+        return render(request, "managers/enter-lesson-attendance.html", context)
+
+
+class ExitLessonAttendance(RoleAccessMixin, View):
+    allowed_role = 'manager'
+
+    def get(self, request, lesson_id):
+        context = {"lesson_id": lesson_id}
+
+        return render(request, "managers/exit-lesson-attendance.html", context)
+
+
+def response(status_code, status_str, msg, name=None, image=None):
+    json_response = JsonResponse(
+        {
+            "status": status_str,
+            "msg": msg,
+            "name": name,
+            "image": image
+        },
+        status=status_code,
+    )
+
+    return json_response
+
+def handle_token_exceptions(token):
     if not token:
-        return JsonResponse({
-            "status": "warning",
-            "msg": "No QR code detected"
-        }, status=400)
+        return response(400, "warning", "No QR code detected")
+
     try:
         uuid_obj = uuid.UUID(token, version=4)
     except ValueError:
-        return JsonResponse({
-            "status": "warning",
-            "msg": "Invalid QR code format"
-        }, status=400)
+        return response(400, "warning", "Invalid QR code format")
+
     try:
-        student = User.objects.get(qr_token=str(uuid_obj))
+        User.objects.get(qr_token=str(uuid_obj))
+        return True
     except User.DoesNotExist:
-        return JsonResponse({
-            "status": "warning",
-            "msg": "Student not identified"
-        }, status=404)
+        return response(404, "warning", "Student not identified")
 
-    # TODO: real timetable / attendance check
-    has_lesson = True
-    if not has_lesson:
-        return JsonResponse({
-            "status": "dark",
-            "msg": "Student has no lessons today"
-        }, status=200)
 
-    # Example: mark attendance here
-    # Attendance.objects.create(student=student, date=timezone.now())
+def handle_student_not_in_group_exception(lesson: Lesson, student: User):
+    if not Lesson.objects.filter(id=lesson.id, group__user_groups__user=student).exists():
+        return response(400, "warning", "O'quvchida bu dars yo'q!")
 
-    return JsonResponse({
-        "status": "success",
-        "name": student.get_full_name() or student.username,
-        "image": getattr(student, "picture_url", None),  # if you have a profile image field
-        "msg": f"{student.username} marked as present"
-    }, status=200)
+    return True
+
+def handle_time_exception(lesson: Lesson):
+    now = datetime.now()
+    now_date = now.date()
+    now_time = now.time()
+
+    if lesson.lesson_date != now_date:
+        return response(400, "warning", "Davomatni DARS SANASIDA qilish shart!")
+
+    # Time check
+    if now_time < lesson.start_time or now_time > lesson.end_time:
+        return response(400, "warning", "Davomatni DARS VAQTIDA qilish shart!")
+
+    return True
+
+
+def check_enter_qr(request, lesson_id):
+    token = request.GET.get("uuid")
+
+    token_exception_response = handle_token_exceptions(token)
+    if token_exception_response is not True:
+        return token_exception_response
+
+    uuid_obj = uuid.UUID(token, version=4)
+
+    student = User.objects.get(qr_token=str(uuid_obj))
+    lesson = Lesson.objects.get(pk=lesson_id)
+
+    # Exception handling
+    not_in_group_exception_response = handle_student_not_in_group_exception(lesson, student)
+    if not_in_group_exception_response is not True:
+        return not_in_group_exception_response
+
+    # Exception handling
+    time_exception_response = handle_time_exception(lesson)
+    if time_exception_response is not True:
+        return time_exception_response
+
+    attendance, created = Attendance.objects.get_or_create(
+        user=student,
+        lesson=lesson,
+    )
+
+    if attendance.came_at:
+        return response(
+            status_code=400,
+            status_str="dark",
+            msg="O'quvchi kelish davomati qilingan!",
+            name=student.get_full_name() or student.username,
+            image=getattr(student, "picture_url", None)
+        )
+
+    attendance.came_at = datetime.now()
+    attendance.save()
+
+    return response(
+        status_code=200,
+        status_str="success",
+        msg="O'quvchi kelish davomati qilindi!",
+        name=student.get_full_name() or student.username,
+        image=getattr(student, "picture_url", None)
+    )
+
+
+def check_exit_qr(request, lesson_id):
+    token = request.GET.get("uuid")
+    exception_response = handle_token_exceptions(token)
+
+    if not exception_response:
+        return exception_response
+
+    uuid_obj = uuid.UUID(token, version=4)
+    student = User.objects.get(qr_token=str(uuid_obj))
+    lesson = Lesson.objects.get(pk=lesson_id)
+
+    try:
+        attendance = Attendance.objects.get(user=student, lesson=lesson)
+    except Attendance.DoesNotExist:
+        return response(
+            status_code=404,
+            status_str="warning",
+            msg="Birinchi kelish davomatini qiling!",
+            name=student.get_full_name() or student.username,
+            image=getattr(student, "picture_url", None)
+        )
+
+    if attendance.left_at:
+        return response(
+            status_code=400,
+            status_str="dark",
+            msg="O'quvchi ketish davomati qilingan!",
+            name=student.get_full_name() or student.username,
+            image=getattr(student, "picture_url", None)
+        )
+
+    attendance.left_at = datetime.now()
+    attendance.save()
+
+    return response(
+        status_code=200,
+        status_str="success",
+        msg="O'quvchi ketish davomati qilindi!",
+        name=student.get_full_name() or student.username,
+        image=getattr(student, "picture_url", None)
+    )
+
