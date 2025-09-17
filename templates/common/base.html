@@ -457,6 +457,7 @@
 
         {% elif USER.role == 'teacher' %}
             <ul class="metismenu" id="sidenav">
+                <!-- Dars Jadvali -->
                 <li>
                     <a href="{% url 'teacher_timetable' %}">
                         <div class="parent-icon"><i class="material-icons-outlined">schedule</i></div>
@@ -464,6 +465,7 @@
                     </a>
 
                 </li>
+                <!-- Guruhlarim -->
                 <li>
                     <a class="has-arrow">
                         <div class="parent-icon"><i class="material-icons-outlined">groups</i></div>
@@ -479,13 +481,16 @@
                         {% endfor %}
                     </ul>
                 </li>
+                <!-- O'quvchilarim -->
                 <li>
                     <a class="has-arrow">
                         <div class="parent-icon"><i class="material-icons-outlined">person</i></div>
                         <div class="menu-title">O'quvchilarim</div>
                     </a>
                     <ul>
-                      <li><a href="{% url 'all_students' %}">Barcha o'quvchilarim</a></li>
+                      <li>
+                          <a href="{% url 'all_students' %}">Barcha o'quvchilarim</a>
+                      </li>
                       <li>
                           <a class="has-arrow">Guruh o'quvchilarim</a>
                           <ul>
@@ -498,6 +503,31 @@
                               {% endfor %}
                           </ul>
                       </li>
+                    </ul>
+                </li>
+                <!-- Darslarim -->
+                <li>
+                    <a class="has-arrow">
+                        <div class="parent-icon"><i class="bi bi-mortarboard" style="font-size: 1.2rem;"></i></div>
+                        <div class="menu-title">Darslarim</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{% url 'teacher_all_lessons' %}">Barcha Darslarim</a>
+                        </li>
+                        <li>
+                            <a class="has-arrow">Guruh Darslarim</a>
+                              <ul>
+                                  {% for teacher_group in USER.teacher_groups.all %}
+                                      <li>
+                                          <a href="{% url 'teacher_group_lessons' teacher_group.group.name %}">
+                                              {{ teacher_group.group.name }}
+                                          </a>
+                                      </li>
+                                  {% endfor %}
+                              </ul>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (TeacherHomeView, TeacherTimeTableView, TeacherGroupDetailView, AllTeacherStudentsView,
-                    TeacherGroupStudentsView)
+                    TeacherGroupStudentsView,
+                    AllTeacherLessonsView, TeacherGroupLessonsView)
 
 urlpatterns = [
     path('', TeacherHomeView.as_view(), name='TeacherHome'),
@@ -8,5 +9,7 @@ urlpatterns = [
     path('group-detail/<str:group_name>', TeacherGroupDetailView.as_view(), name='group_detail'),
     path('all-students', AllTeacherStudentsView.as_view(), name='all_students'),
     path('group-students/<str:group_name>', TeacherGroupStudentsView.as_view(), name='group_students'),
+    path('all-lessons', AllTeacherLessonsView.as_view(), name='teacher_all_lessons'),
+    path('group-lessons/<str:group_name>', TeacherGroupLessonsView.as_view(), name='teacher_group_lessons'),
 
 ]

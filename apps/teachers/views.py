@@ -9,6 +9,7 @@ from apps.common.utils import RoleAccessMixin
 from models import Lesson, Group, CustomGroupDay, User, UserGroups, TeacherGroups
 
 from datetime import date
+import calendar
 
 
 class TeacherHomeView(RoleAccessMixin, View):
@@ -79,7 +80,7 @@ class TeacherGroupDetailView(RoleAccessMixin, View):
             "group_lessons_count": group.lessons.all().count()
         }
 
-        return render(request, "teachers/group_detail.html", context)
+        return render(request, "teachers/group-detail.html", context)
 
 
 class AllTeacherStudentsView(RoleAccessMixin, View):
@@ -111,7 +112,7 @@ class AllTeacherStudentsView(RoleAccessMixin, View):
             "page_obj": page_obj,
         }
 
-        return render(request, "teachers/all_students.html", context)
+        return render(request, "teachers/all-students.html", context)
 
 
 class TeacherGroupStudentsView(RoleAccessMixin, View):
@@ -143,4 +144,73 @@ class TeacherGroupStudentsView(RoleAccessMixin, View):
 
         context = {"group_students": group_students, "group_name": group_name}
 
-        return render(request, "teachers/group_students.html", context)
+        return render(request, "teachers/group-students.html", context)
+
+
+class AllTeacherLessonsView(RoleAccessMixin, View):
+    allowed_role = "teacher"
+
+    def get(self, request):
+        context = {}
+
+        qs = Lesson.objects.filter(group__teacher_groups__teacher=request.user)
+
+        paginator = Paginator(object_list=qs, per_page=10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context["page_obj"] = page_obj
+        context["lessons"] = qs
+
+        return render(request, "teachers/all-lessons.html", context)
+
+
+MONTH_INTS_TO_NAMES = {
+    1: "Yanvar",
+    2: "Fevral",
+    3: "Mart",
+    4: "Aprel",
+    5: "May",
+    6: "Iyun",
+    7: "Iyul",
+    8: "Avgust",
+    9: "Sentabr",
+    10: "Oktabr",
+    11: "Noyabr",
+    12: "Dekabr",
+}
+class TeacherGroupLessonsView(RoleAccessMixin, View):
+    allowed_role = "teacher"
+
+    def get(self, request, group_name):
+        context = {}
+
+        try:
+            TeacherGroups.objects.get(teacher=request.user, group__name=group_name)
+        except TeacherGroups.DoesNotExist:
+            return Http404
+
+        group_lessons = Lesson.objects.filter(group__name=group_name).order_by("lesson_date")
+
+        # Months FILTER logic
+        existing_month_pairs = {}
+        for group_lesson in group_lessons:
+            month = group_lesson.lesson_date.month
+            if month not in existing_month_pairs:
+                existing_month_pairs[month] = MONTH_INTS_TO_NAMES.get(month)
+        context["months"] = existing_month_pairs
+
+        selected_month = request.GET.get("selected_month")
+        if selected_month:
+            selected_month = int(selected_month)
+            context["selected_month"] = selected_month
+
+            group_lessons = Lesson.objects.filter(group__name=group_name, lesson_date__month=selected_month).order_by("lesson_date")
+
+        context["group_lessons"] = group_lessons
+
+        return render(request, "teachers/group-lessons.html", context)
+
+
+
+

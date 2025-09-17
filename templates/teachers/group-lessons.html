@@ -1,0 +1,104 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block title %} Guruh Darslarim {% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block breadcrumb_icon %}
+    <i class="fadeIn animated bx bx-list-ul" style="font-size: 200%;"></i>
+{% endblock %}
+
+{% block breadcrumb_title %}
+  Guruh Darslarim
+{% endblock %}
+
+
+{% block subcontent %}
+
+    <div class="row">
+
+      <div class="col-xl-12">
+
+        <div class="card shadow-sm border-0 rounded-3">
+
+          <div class="card-body">
+
+            <div class="table-responsive">
+              <p class="mb-0">Darslar Ro'yhati</p>
+              <hr>
+                <div class="mb-2">
+                    <button id="dropdownBtn"
+                            type="button"
+                            class="btn border btn-filter dropdown-toggle px-3"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                      {% if selected_month %} {{ months|get_item:selected_month }} {% else %} -- Oy: Barchasi -- {% endif %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for key, value in months.items %}
+                          <li><a class="dropdown-item" href="?selected_month={{ key }}">{{ value }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+              {% if group_lessons %}
+
+                  <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Guruh</th>
+                        <th scope="col">Sana</th>
+                        <th scope="col">Boshlanish</th>
+                        <th scope="col">Tugash</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                      {% for group_lesson in group_lessons %}
+
+                            <tr>
+                              <td>{{ forloop.counter }}</td>
+                              <td>{{ group_lesson.group.name }}</td>
+                              <td>{{ group_lesson.lesson_date }}</td>
+                              <td>{{ group_lesson.start_time }}</td>
+                              <td>{{ group_lesson.end_time }}</td>
+                            </tr>
+
+                      {% endfor %}
+
+                    </tbody>
+
+                  </table>
+
+              {% else %}
+
+                  <p class="mb-0 fw-bold text-warning">Dars mavjud emas!</p>
+
+              {% endif %}
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+{% endblock %}
+
