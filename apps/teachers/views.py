@@ -1,15 +1,17 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import F, Value, Prefetch
 from django.db.models.functions import NullIf
-from django.http import Http404
+from django.http import Http404, JsonResponse
+from django.views.decorators.http import require_POST
 
 from apps.common.utils import RoleAccessMixin
-from models import Lesson, Group, CustomGroupDay, User, UserGroups, TeacherGroups
+from models import Lesson, Group, CustomGroupDay, User, UserGroups, TeacherGroups, ClassMaterial, HomeworkMaterial
 
 from datetime import date
-import calendar
+
+import os
 
 
 class TeacherHomeView(RoleAccessMixin, View):
@@ -211,6 +213,88 @@ class TeacherGroupLessonsView(RoleAccessMixin, View):
 
         return render(request, "teachers/group-lessons.html", context)
 
+
+class TeacherLessonDetailView(RoleAccessMixin, View):
+    template_name = "teachers/lesson-detail.html"
+    allowed_role = "teacher"
+
+    def convert_to_embed(self, url):
+        if "youtube.com/watch" in url:
+            from urllib.parse import urlparse, parse_qs
+            parsed = urlparse(url)
+            video_id = parse_qs(parsed.query).get("v", [None])[0]
+            if video_id:
+                return f"https://www.youtube.com/embed/{video_id}"
+        return url
+
+    def get(self, request, pk):
+        lesson = get_object_or_404(Lesson, pk=pk)
+        context = {
+            "lesson": lesson,
+            "class_materials": lesson.class_materials.all(),
+            "homework_materials": lesson.homework_materials.all(),
+            "lesson_video_url_embed": None
+        }
+
+        if lesson.lesson_video_url:
+            context["lesson_video_url_embed"] = self.convert_to_embed(lesson.lesson_video_url)
+            print(context["lesson_video_url_embed"])
+
+        for class_material in context["class_materials"]:
+            class_material.file_name = os.path.basename(class_material.material.name)
+
+        for homework_material in context["homework_materials"]:
+            homework_material.file_name = os.path.basename(homework_material.material.name)
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        lesson = get_object_or_404(Lesson, pk=pk)
+
+        # FIELDS ACCORDING
+        # ---------------------------------------------------------------
+        # Topic
+        topic = request.POST.get("topic")
+        if topic:
+            lesson.topic = topic
+        # Video url
+        video_url = request.POST.get("video_url")
+        if video_url:
+            lesson.lesson_video_url = video_url
+        lesson.save()
+        # CW files
+        cw_files = request.FILES.getlist("cw_files")
+        if cw_files:
+            for i in cw_files:
+                ClassMaterial.objects.create(lesson=lesson, material=i)
+        # HW files
+        hw_files = request.FILES.getlist("hw_files")
+        if hw_files:
+            for i in hw_files:
+                HomeworkMaterial.objects.create(lesson=lesson, material=i)
+        # ---------------------------------------------------------------
+
+        return redirect("teacher_lesson_detail", pk=lesson.pk)
+
+
+@require_POST
+def delete_class_material(request, material_id):
+    material = get_object_or_404(ClassMaterial, pk=material_id)
+
+    material.material.delete(save=False)
+    material.delete()
+
+    return JsonResponse({"status": "success", "msg": "Fayl muvaffaqiyatli o‘chirildi"})
+
+
+@require_POST
+def delete_homework_material(request, material_id):
+    material = get_object_or_404(HomeworkMaterial, pk=material_id)
+
+    material.material.delete(save=False)
+    material.delete()
+
+    return JsonResponse({"status": "success", "msg": "Fayl muvaffaqiyatli o‘chirildi"})
 
 
 

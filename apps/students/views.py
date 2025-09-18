@@ -110,7 +110,7 @@ class StudentLessonDetailView(RoleAccessMixin, DetailView):
     allowed_role = "student"
 
     model = Lesson
-    template_name = "students/lesson_detail.html"
+    template_name = "students/lesson-detail.html"
     context_object_name = "lesson"
 
     def get_object(self, queryset=None):

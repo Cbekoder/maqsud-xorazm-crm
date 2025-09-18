@@ -30,7 +30,7 @@ class StudentGroupAttendanceView(RoleAccessMixin, View):
 
         return render(
             request=request,
-            template_name="students/group_attendance.html",
+            template_name="students/group-attendance.html",
             context={
                 "group_name": group_name,
                 "page_obj": page_obj,

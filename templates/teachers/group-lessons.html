@@ -64,7 +64,7 @@
                       {% for group_lesson in group_lessons %}
 
                             <tr>
-                              <td>{{ forloop.counter }}</td>
+                                <td><a href="#"><u>{{ forloop.counter }}</u></a></td>
                               <td>{{ group_lesson.group.name }}</td>
                               <td>{{ group_lesson.lesson_date }}</td>
                               <td>{{ group_lesson.start_time }}</td>

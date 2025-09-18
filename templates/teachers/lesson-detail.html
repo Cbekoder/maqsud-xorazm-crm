@@ -1,0 +1,282 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+
+{% block title %} Dars Ma'lumotlari  {% endblock %}
+
+{% block extra_css %}
+
+<link href="{% static 'plugins/fancy-file-uploader/fancy_fileupload.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/Drag-And-Drop/dist/imageuploadify.min.css' %}" rel="stylesheet">
+
+<style>
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: #343a40;
+    color: white;
+  }
+
+  .closebtn {
+    cursor: pointer;
+    margin-left: auto; /* pushes it to the right */
+  }
+
+
+</style>
+
+{% endblock %}
+
+{% block breadcrumb_icon %}
+    <i class="bx bx-info-circle" style="font-size: 200%;"></i>
+{% endblock %}
+
+{% block breadcrumb_title %}
+    Dars Ma'lumotlari
+{% endblock %}
+
+
+{% block subcontent %}
+  <div class="card">
+    <div class="card-body">
+      <div class="row row-cols-auto row-cols-2 g-3">
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6>📌 Fan</h6>
+            <p class="mb-0">{{ lesson.group.lesson_name }}</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="ps-3 pe-3 pt-4 pb-4 border border-primary text-end rounded bg-light">
+            <h6>📅 Sana</h6>
+            <p class="mb-0 fw-bold fst-italic" style="font-size: clamp(0.65rem, 1.5vw, 1.5rem);">{{ lesson.lesson_date }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 pt-3">
+        <div class="col-md-6 col-12">
+          <div class="p-4 border border-3 border-success rounded bg-light">
+            <h6>🕒 Boshlanish</h6>
+            <p class="mb-0">{{ lesson.start_time }}</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div class="p-4 border border-3 border-danger rounded bg-light">
+            <h6>🕔 Tugash</h6>
+            <p class="mb-0">{{ lesson.end_time }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-auto row-cols-1 g-3 pt-3">
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6>📖 Mavzu</h6>
+            {% if lesson.topic %}
+              <p class="mb-0">{{ lesson.topic }}</p>
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-auto row-cols-1 row-cols-lg-2 row-cols-md-1 g-3 pt-3">
+        <div class="col">
+          <!--
+          <div class="p-4 border rounded bg-light">
+            <h6 class="mb-3">📂 Sinf Materiallari</h6>
+
+            {% if class_materials %}
+              <div class="d-flex flex-wrap gap-1">
+                {% for material in class_materials %}
+                  <p style="font-size: 80%;">
+                    <a href="{{ material.material.url }}"
+                       download>
+                    {{ material.file_name }}
+                    </a>
+                    {% if not forloop.last %}| {% endif %}
+                  </p>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+          -->
+          <div class="p-4 border rounded bg-light">
+            <h6 class="mb-3">📂 Sinf Materiallari</h6>
+            {% if class_materials %}
+              {% for material in class_materials %}
+                <div class="chip chip-lg bg-dark">
+                  <a href="{{ material.material.url }}"
+                     download>
+                  {{ material.file_name }}
+                  </a>
+                  <span class="closebtn"
+                        data-delete-url="{% url 'teacher_delete_class_material' material.id %}"
+                        onclick="confirmDeleteMaterial(this)">
+                    ×
+                  </span>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="p-4 border rounded bg-light">
+            <h6 class="mb-3">📂 Uyga Vazifa Materiallari</h6>
+            {% if homework_materials %}
+              {% for material in homework_materials %}
+                <div class="chip chip-lg bg-dark">
+                  <a href="{{ material.material.url }}"
+                     download>
+                  {{ material.file_name }}
+                  </a>
+                  <span
+                          class="closebtn"
+                          data-delete-url="{% url 'teacher_delete_homework_material' material.id %}"
+                          onclick="confirmDeleteMaterial(this)">
+                    ×
+                  </span>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="mb-0" style="color: #ED2939;">yuklanmangan</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!--end row-->
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title mb-3">
+        <h4>🎥 Video</h4>
+        <hr>
+      </div>
+      <div class="row" id="video-section">
+        {% if lesson_video_url_embed %}
+          <iframe width="560"
+                  height="315"
+                  src="{{ lesson_video_url_embed }}"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen>
+          </iframe>
+        {% else %}
+          <p class="mb-0" style="color: #ED2939;">yuklanmagan</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-grd-primary w-45 px-5" data-bs-toggle="modal"
+    data-bs-target="#FormModal">Tahrirlash</button>
+  <!-- Modal -->
+  <div class="modal fade" id="FormModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+          <h5 class="modal-title">Dars Ma'lumotlarini Tahrirlash</h5>
+          <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
+            <i class="material-icons-outlined">close</i>
+          </a>
+        </div>
+        <div class="modal-body">
+          <div class="form-body">
+
+
+            <form class="row g-3" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="col-md-12">
+                <label for="input1" class="form-label">Mavzu</label>
+                <input type="text" class="form-control" id="input1" name="topic" placeholder="Mavzu" value="{{ lesson.topic }}">
+              </div>
+              <div class="col-md-12">
+                <label for="cw-file-upload" class="form-label">Uyga Vazifa Materiallari</label>
+                <input class="form-control" id="cw-file-upload" type="file" name="cw_files" multiple>
+              </div>
+              <div class="col-md-12">
+                <label for="hw-file-upload" class="form-label">Sinf Vazifa Materiallari</label>
+                <input class="form-control" id="hw-file-upload" type="file" name="hw_files" multiple>
+              </div>
+              <div class="col-md-12">
+                <label for="video-url" class="form-label">Video havolasi</label>
+                <input type="text" class="form-control" id="video-url" name="video_url" placeholder="Video havolasi" value="{{ lesson.lesson_video_url }}">
+              </div>
+
+              <div class="col-md-12">
+                <div class="d-md-flex d-grid align-items-center gap-3">
+                  <button type="submit" class="btn btn-grd-danger px-4">Tahrirlash</button>
+                  <button type="reset" class="btn btn-grd-info px-4">Tozalash</button>
+                </div>
+              </div>
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+      return cookieValue;
+    }
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  async function confirmDeleteMaterial(el) {
+    const url = el.dataset.deleteUrl;
+
+    if (confirm("Haqiqatan ham bu faylni o‘chirmoqchimisiz?")) {
+      try {
+        const resp = await fetch(url, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json"
+          }
+        });
+        const data = await resp.json();
+        if (resp.ok) {
+          el.parentElement.remove();
+        } else {
+          alert(data.msg || "Xatolik yuz berdi ❌")
+         };
+      } catch (e) {
+        alert("Tarmoq xatosi ❌");
+      }
+    }
+  }
+</script>
+
+{% endblock %}

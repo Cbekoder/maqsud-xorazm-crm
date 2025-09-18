@@ -50,7 +50,7 @@
                       {% for lesson in page_obj %}
 
                             <tr>
-                              <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+                              <td><a href="{% url 'teacher_lesson_detail' lesson.pk %}"><u>{{ forloop.counter0|add:page_obj.start_index }}</u></a></td>
                               <td class="fw-semibold">{{ lesson.group.name }}</td>
                               <td class="fw-semibold">{{ lesson.lesson_date }}</td>
                               <td>{{ lesson.start_time }}</td>
