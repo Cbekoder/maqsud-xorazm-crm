@@ -26,7 +26,7 @@ class Lesson(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.group.lesson_name} | {self.group} ({self.lesson_date}) [{self.start_time} - {self.end_time}]"
+        return f"{self.group} ({self.lesson_date}) [{self.start_time} - {self.end_time}]"
 
     class Meta:
         verbose_name = _("Lesson")

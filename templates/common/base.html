@@ -33,10 +33,10 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/extra-icons.css' %}">
 
+    <link href="{% static 'css/common/base.css' %}" rel="stylesheet">
     {% block extra_css %}
         <!-- Add your custom CSS here -->
         <!-- Add your custom CSS here -->
-        <link href="{% static 'css/common/base.css' %}" rel="stylesheet">
     {% endblock %}
 
 </head>
@@ -517,19 +517,34 @@
                         </li>
                         <li>
                             <a class="has-arrow">Guruh Darslarim</a>
-                              <ul>
-                                  {% for teacher_group in USER.teacher_groups.all %}
-                                      <li>
-                                          <a href="{% url 'teacher_group_lessons' teacher_group.group.name %}">
-                                              {{ teacher_group.group.name }}
-                                          </a>
-                                      </li>
-                                  {% endfor %}
-                              </ul>
-                            </a>
+                            <ul>
+                              {% for teacher_group in USER.teacher_groups.all %}
+                                  <li>
+                                      <a href="{% url 'teacher_group_lessons' teacher_group.group.name %}">
+                                          {{ teacher_group.group.name }}
+                                      </a>
+                                  </li>
+                              {% endfor %}
+                            </ul>
                         </li>
                     </ul>
                 </li>
+                <!-- Baholar -->
+                <li>
+                    <a class="has-arrow">
+                        <div class="parent-icon"><i class="bi bi-star"></i></div>
+                        <div class="menu-title">Baholar</div>
+                    </a>
+                    <ul>
+                        <li>
+                           <a href="{% url 'teacher_classwork_marking' %}">Sinf Vazifa</a>
+                        </li>
+                        <li>
+                           <a href="{% url 'teacher_homework_marking' %}">Uyga Vazifa</a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
 
         {% elif USER.role == 'manager' %}

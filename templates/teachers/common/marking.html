@@ -1,0 +1,427 @@
+{% extends 'common/base.html' %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block breadcrumb_icon %}
+<i class="bx bx-star" style="font-size: 150%;"></i>
+{% endblock %}
+
+{% block breadcrumb_title %} Baholar Bo'limi {% endblock %}
+
+
+{% block subcontent %}
+    <div class="row g-3 mt-4 align-items-center">
+      <!-- Search bar -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="position-relative">
+          <input id="searchInput" class="form-control ps-5" type="search" placeholder="O'quvchi ismi">
+          <span class="material-icons-outlined position-absolute translate-middle-y start-0 top-50 ms-3 fs-5">
+            search
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 my-2 align-items-center">
+      <!-- Filters (left side) -->
+      <div class="col-12 col-lg d-flex flex-wrap gap-2">
+        <div class="btn-group">
+          <button type="button" class="btn btn-filter dropdown-toggle px-4" data-bs-toggle="dropdown">
+            Guruh
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="?group=all">Barcha Guruhlar</a></li>
+            {% for teacher_group in teacher_groups %}
+              <li><a class="dropdown-item" href="?group={{ teacher_group.group.name }}">{{ teacher_group.group.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Buttons (right side) -->
+      <div class="col-12 col-lg-auto d-flex justify-content-lg-end gap-2">
+        <button class="btn btn-filter px-3"><i class="bi bi-upload"></i></button>
+        <button class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#FormModal"><i class="bi bi-plus-lg"></i></button>
+      </div>
+
+      <div class="modal fade" id="FormModal">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+              <h5 class="modal-title">Registration Form</h5>
+              <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
+                <i class="material-icons-outlined">close</i>
+              </a>
+            </div>
+
+            <div class="modal-body">
+              <div class="form-body">
+                <form class="row g-3" method="post">
+                  {% csrf_token %}
+                  <p class="mb-0" style="color: red;">{{ err_msg }}</p>
+                  <div class="col-md-12">
+                    <label for="group_select" class="form-label">Guruh</label>
+                    <select id="group_select" name="group_id" class="form-select" required>
+                      <option value="" {% if not group_id %}selected{% endif %}></option>
+                      {% for teacher_group in teacher_groups %}
+                        <option value="{{ teacher_group.group.id }}" {% if group_id == teacher_group.group.id %}selected{% endif %}>
+                          {{ teacher_group.group.name }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="lesson_select" class="form-label">Dars</label>
+                    <select id="lesson_select" name="lesson_id" class="form-select" required>
+                      {% if not lesson_id %}<option value="" selected disabled></option>{% endif %}
+                      {% if lessons %}
+                        {% for lesson in lessons %}
+                          <option value="{{ lesson.id }}" {% if lesson_id == lesson.id %}selected{% endif %}>
+                            {{ lesson.lesson_date }} [{{ lesson.start_time }} - {{ lesson.end_time}}]
+                          </option>
+                        {% endfor %}
+                      {% endif %}
+                    </select>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="student_select" class="form-label">O'quvchi</label>
+                    <select id="student_select" name="student_id" class="form-select" required>
+                      {% if not student_id %}<option value="" selected disabled></option>{% endif %}
+                      {% if students %}
+                        {% for student in students %}
+                          <option value="{{ student.id }}" {% if student_id == student.id %}selected{% endif %}>
+                            {{ student.username }}
+                          </option>
+                        {% endfor %}
+                      {% endif %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label for="score_select" class="form-label">Baho</label>
+                    <select id="score_select" name="score" class="form-select" required>
+                      <option value="" {% if not score %} selected {% endif %} disabled></option>
+                      {% for score_value, label in scores %}
+                        <option value="{{ score_value }}" {% if score == score_value %} selected {% endif %}>{{ score_value }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="d-md-flex d-grid align-items-center gap-3">
+                      <button type="submit" class="btn btn-grd-danger px-4">Tasdiqlash</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <div class="card mt-1">
+      <div class="card-body">
+        <div class="product-table">
+          <div class="table-responsive white-space-nowrap">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>O'quvchi Ismi</th>
+                  <th>Guruh</th>
+                  <th>Baho</th>
+                  <th>Dars Sanasi</th>
+                  <th>Dars Vaqti</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for grade_obj in grade_qs %}
+                  <tr>
+                    <td>
+                      {% if grade_obj.student.fist_name %}
+                        {{ grade_obj.student.fist_name }}
+                      {% else %}
+                        {{ grade_obj.student.username }}
+                      {% endif %}
+                    </td>
+                    <td>{{ grade_obj.lesson.group.name }}</td>
+                    <td>
+                        <i class="bi bi-star-fill text-warning me-2"></i><span>{{ grade_obj.score }}</span>
+                    </td>
+                    <td>{{ grade_obj.lesson.lesson_date }}</td>
+                    <td>{{ grade_obj.lesson.start_time }}-{{ grade_obj.lesson.end_time }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-light"
+                              type="button"
+                              onclick="openEditFormModal(this)"
+                              data-grade-id="{{ grade_obj.id }}"
+                              data-group-id="{{ grade_obj.lesson.group.id }}"
+                              data-lesson-id="{{ grade_obj.lesson.id }}"
+                              data-student-id="{{ grade_obj.student.id }}"
+                              data-score="{{ grade_obj.score }}">
+                        <i class="bi bi-pencil text-primary"></i>
+                      </button>
+                      <button class="btn btn-sm btn-light"
+                              type="button"
+                              data-bs-toggle="modal"
+                              data-bs-target="#DeleteMarkModal"
+                              data-grade-id="{{ grade_obj.id }}"
+                              data-grade-type="{% block grade_type %}{% endblock %}">
+                        <i class="bi bi-trash text-danger"></i>
+                      </button>
+
+                    </td>
+                  </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="DeleteMarkModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0 py-2">
+            <h5 class="modal-title">O'chirishni Tasdiqlang</h5>
+            <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
+              <i class="material-icons-outlined">close</i>
+            </a>
+          </div>
+          <div class="modal-body">Bahoni o'chirmoqchimisiz?</div>
+          <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-grd-danger" id="confirmDeleteBtn">Ha</button>
+            <button type="button" class="btn btn-grd-info" data-bs-dismiss="modal">Yo'q</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<!--Dropdown handling script-->
+<script>
+  document.getElementById("group_select").addEventListener("change", function() {
+    const group_id = this.value;
+    const lessonSelect = document.getElementById("lesson_select");
+    const studentSelect = document.getElementById("student_select");
+
+    // clear previous options
+    lessonSelect.innerHTML = '<option value="" selected disabled></option>';
+    studentSelect.innerHTML = '<option value="" selected disabled></option>';
+
+    if (!group_id) {
+      return;
+    }
+
+    fetch(`/teacher/get/group-lessons/${group_id}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.length === 0) {
+          lessonSelect.innerHTML += "<option disabled>⚠️ Dars mavjud emas</option>";
+          return;
+        }
+        data.forEach(lesson => {
+          const option = document.createElement("option");
+          option.value = lesson.id;
+          option.textContent = `(${lesson.lesson_date}) [${lesson.start_time}-${lesson.end_time}]`;
+          lessonSelect.appendChild(option);
+        });
+      })
+      .catch(() => {
+        lessonSelect.innerHTML = '<option disabled>❌ yuklashda xatolik</option>';
+      });
+
+      // ---- Fetch students ----
+      fetch(`/teacher/get/group-students/${group_id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length === 0) {
+          studentSelect.innerHTML += "<option disabled>⚠️ O'quvchi mavjud emas</option>";
+          return;
+        }
+        data.forEach((student) => {
+          const option = document.createElement("option");
+          option.value = student.id;
+          option.textContent = student.username;
+          studentSelect.appendChild(option);
+        });
+      })
+      .catch(() => {
+        studentSelect.innerHTML = '<option disabled>❌ yuklashda xatolik</option>';
+      });
+  });
+
+  function openFormModal() {
+    const formModal = new bootstrap.Modal(document.getElementById("FormModal"));
+    formModal.show();
+  }
+
+  function openEditFormModal(button){
+    const modalEl = document.getElementById("FormModal");
+    const formModal = new bootstrap.Modal(modalEl);
+
+    const form = modalEl.querySelector("form");
+
+    const gradeId = button.getAttribute("data-grade-id");
+    const groupId = button.getAttribute("data-group-id");
+    const lessonId = button.getAttribute("data-lesson-id");
+    const studentId = button.getAttribute("data-student-id");
+    const score = button.getAttribute("data-score");
+
+    document.querySelector("#group_select").value = groupId;
+
+    // Fetch lessons for group
+    fetch(`/teacher/get/group-lessons/${groupId}`)
+        .then(res => res.json())
+        .then(lessons => {
+            const lessonSelect = document.querySelector("#lesson_select");
+            lessonSelect.innerHTML = ""; // clear old options
+            lessons.forEach(lesson => {
+                const opt = document.createElement("option");
+                opt.value = lesson.id;
+                opt.textContent = `${lesson.lesson_date} [${lesson.start_time} - ${lesson.end_time}]`;
+                if (lesson.id == lessonId) opt.selected = true;
+                lessonSelect.appendChild(opt);
+            });
+        });
+
+    // Fetch students for group
+    fetch(`/teacher/get/group-students/${groupId}`)
+        .then(res => res.json())
+        .then(students => {
+            const studentSelect = document.querySelector("#student_select");
+            studentSelect.innerHTML = "";
+            students.forEach(student => {
+                const opt = document.createElement("option");
+                opt.value = student.id;
+                opt.textContent = student.username;
+                if (student.id == studentId) opt.selected = true;
+                studentSelect.appendChild(opt);
+            });
+        });
+
+
+    document.querySelector("#score_select").value = score;
+
+    // Clear any old hidden inputs
+    form.querySelectorAll("input[name='is_editing'], input[name='grade_id']").forEach(el => el.remove());
+
+    const editHiddenInput = document.createElement("input");
+    editHiddenInput.type = "hidden";
+    editHiddenInput.name = "is_editing";
+    editHiddenInput.value = true;
+
+    const gradeInput = document.createElement("input");
+    gradeInput.type = "hidden";
+    gradeInput.name = "grade_id";
+    gradeInput.value = gradeId;
+    form.appendChild(gradeInput);
+
+    form.appendChild(editHiddenInput);
+    form.appendChild(gradeInput);
+    formModal.show();
+  }
+
+  {% if err_msg %}
+    document.addEventListener("DOMContentLoaded", function() {
+      openFormModal();
+    });
+  {% endif %}
+
+</script>
+<!--Deletion script-->
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie('csrftoken');
+
+  const deleteModal = document.getElementById('DeleteMarkModal');
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const gradeId = button.getAttribute('data-grade-id');
+    const gradeType = button.getAttribute('data-grade-type');
+
+    const confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
+    confirmBtn.setAttribute('data-grade-id', gradeId);
+    confirmBtn.setAttribute('data-grade-type', gradeType);
+  });
+
+  // When confirm is clicked
+  document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+    const gradeId = this.getAttribute('data-grade-id');
+    const gradeType = this.getAttribute('data-grade-type');
+
+    let url;
+    if (gradeType === 'activity') {
+      url = `/teacher/delete-activity-grade/${gradeId}`;
+    } else if (gradeType === 'homework') {
+      url = `/teacher/delete-homework-grade/${gradeId}`;
+    }
+
+    // Example: send POST/DELETE request
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrftoken
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        const modal = bootstrap.Modal.getInstance(deleteModal);
+        modal.hide(); // close manually
+        location.reload(); // refresh page or remove row via JS
+      } else {
+        alert("O'chirishda xatolik!");
+      }
+    });
+  });
+
+
+</script>
+
+<script>
+  document.getElementById("searchInput").addEventListener("keyup", function () {
+    const query = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(row => {
+      // first column contains student name
+      const studentCell = row.querySelector("td:first-child");
+      const studentName = studentCell.innerText.toLowerCase();
+
+      if (studentName.includes(query)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  });
+</script>
+
+
+{% endblock %}
+
+
