@@ -1,15 +1,23 @@
 import uuid
 
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
 from django.views import View
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
 
 from apps.common.utils import RoleAccessMixin
 
-from models import User, Attendance, Lesson, Group
+from models import User, Attendance, Lesson, Group, Course
+from .forms import CourseForm
 
 from datetime import datetime
+
+
+class ManagerAccessMixin(RoleAccessMixin):
+    allowed_role = "manager"
 
 
 class ManagerHomeView(RoleAccessMixin, View):
@@ -200,4 +208,56 @@ def check_exit_qr(request, lesson_id):
         name=student.get_full_name() or student.username,
         image=getattr(student, "picture_url", None)
     )
+
+
+class ManagerCourseListView(RoleAccessMixin, View):
+    allowed_role = "manager"
+    template_name = "managers/courses/course-list.html"
+
+    def get_context_data(self):
+        context = {}
+
+        courses = Course.objects.all()
+        context["courses"] = courses
+
+        return context
+
+    def get(self, request):
+        form = CourseForm()
+
+        context = self.get_context_data()
+        context["course_form"] = form
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = CourseForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect(request.META.get("HTTP_REFERER", "manager_course_list"))
+
+        context = self.get_context_data()
+        context["course_form"] = form
+
+        return render(request, self.template_name, context)
+
+
+class ManagerEditCourseView(RoleAccessMixin, UpdateView):
+    allowed_role = "manager"
+    model = Course
+    form_class = CourseForm
+    template_name = "managers/courses/edit-course.html"
+    pk_url_kwarg = "course_id"
+    success_url = reverse_lazy("manager_course_list")
+
+
+@method_decorator(require_POST, name="dispatch")
+class ManagerDeleteCourseView(RoleAccessMixin, View):
+    allowed_role = "manager"
+
+    def post(self, request, course_id):
+        course = get_object_or_404(Course, id=course_id)
+        course.delete()
+        return JsonResponse({"success": True, "message": "Course deleted"})
 

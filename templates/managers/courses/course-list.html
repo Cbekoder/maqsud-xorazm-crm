@@ -1,0 +1,265 @@
+{% extends "common/base.html" %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block breadcrumb_icon %}
+{% endblock %}
+
+{% block breadcrumb_title %} Kurslar {% endblock %}
+
+{% block subcontent %}
+    <!-- Search bar -->
+    <div class="row g-3 mt-4 align-items-center">
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="position-relative">
+          <input id="searchCourseInput" class="form-control ps-5" type="search" placeholder="Kurs Nomi">
+          <span class="material-icons-outlined position-absolute translate-middle-y start-0 top-50 ms-3 fs-5">
+            search
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- BTN add -->
+    <div class="row g-3 my-2 align-items-center">
+      <div class="col-12 col-lg-auto d-flex justify-content-lg-end gap-2">
+        <button class="btn btn-primary px-3" onclick="openModal('addCourseFormModal')">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="card mt-1">
+      <div class="card-body">
+        <div class="product-table">
+          <div class="table-responsive white-space-nowrap">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Kurs Nomi</th>
+                  <th>Kurs Haqida</th>
+                  <th>Qo'shilgan Sanasi</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if courses %}
+                  {% for course in courses %}
+
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ course.name }}</td>
+                      <td>
+                        {% if course.description %}
+                          <button class="btn btn-sm btn-link p-0"
+                                  type="button"
+                                  onclick="openCourseDescriptionModal('{{ course.name|escapejs }}', '{{ course.description|escapejs }}')">
+                            tavsifni ko'rish
+                          </button>
+                        {% else %}
+                          -
+                        {% endif  %}
+                      </td>
+                      <td>{{ course.created_at }}</td>
+                      <td>
+                        <a class="btn btn-sm btn-light"
+                           type="button"
+                           href="{% url 'manager_edit_course' course.id %}">
+                          <i class="bi bi-pencil text-primary"></i>
+                        </a>
+                        <button class="btn btn-sm btn-light"
+                                type="button"
+                                onclick="openDeleteModal('deleteCourseModal', {{ course.id }})">
+                          <i class="bi bi-trash text-danger"></i>
+                        </button>
+
+                      </td>
+                    </tr>
+
+
+                  {% endfor %}
+                {% endif %}
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!--  Course Description Modal -->
+        <div class="modal fade" id="courseDescriptionModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-bottom-0 py-2">
+                <h5 class="modal-title" id="courseName">Kurs sarlavhasi</h5>
+                <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
+                  <i class="material-icons-outlined">close</i>
+                </a>
+              </div>
+              <div class="modal-body" id="courseDescription"></div>
+            </div>
+          </div>
+        </div>
+
+        <!--  Course Form Modal -->
+        <div class="modal fade" id="addCourseFormModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-bottom-0 py-2 bg-grd-info">
+                <h5 class="modal-title text-white fw-bold">Kurs Formasi</h5>
+                <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
+                  <i class="material-icons-outlined">close</i>
+                </a>
+              </div>
+
+              <div class="modal-body">
+                <div class="form-body">
+                  <form class="row g-3" method="post">
+                    {% csrf_token %}
+
+                    {{ course_form }}
+
+                    <div class="col-md-12">
+                      <div class="d-md-flex d-grid align-items-center gap-3">
+                        <button type="submit" class="btn btn-grd btn-grd-info px-5">Tasdiqlash</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--  Delete Course Modal -->
+        <div class="modal fade" id="deleteCourseModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-bottom-0 py-2">
+                <h5 class="modal-title">O'chirishni Tasdiqlang</h5>
+                <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="modal">
+                  <i class="material-icons-outlined">close</i>
+                </a>
+              </div>
+              <div class="modal-body">Kursni o'chirmoqchimisiz?</div>
+              <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-grd btn-grd-danger" id="confirmDeleteCourseBtn">Ha</button>
+                <button type="button" class="btn btn-grd btn-grd-info" data-bs-dismiss="modal">Yo'q</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<!-- Open Course Description Modal -->
+<script>
+
+  function openCourseDescriptionModal(name, description){
+    const modalEl = document.getElementById('courseDescriptionModal');
+    modalEl.querySelector('#courseName').textContent = name;
+    modalEl.querySelector('#courseDescription').textContent = description;
+
+    // open modal manually
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  }
+
+</script>
+
+<!-- Confirm Course Deletion-->
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function deleteCourseById(courseId){
+    const url = "{% url 'manager_delete_course' 0 %}".replace("0", courseId)
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+        "Content-Type": "application/json"
+      },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Xatolik!");
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      }
+    })
+    .catch(() =>{
+      alert("O'chirishda xatolik!");
+    });
+  }
+</script>
+
+<!-- Open Modals -->
+<script>
+  function openModal(modalElementId){
+    const modalEl = document.getElementById(modalElementId);
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  }
+
+  function openDeleteModal(modalElementId, courseId){
+    const modalEl = document.getElementById(modalElementId);
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    const confirmBtn = modalEl.querySelector('#confirmDeleteCourseBtn');
+    // Clean any old onclick to avoid duplicates
+    confirmBtn.onclick = null;
+
+    // Assign new onclick action
+    confirmBtn.onclick = function () {
+      deleteCourseById(courseId);
+    };
+  }
+
+  {% if course_form.errors %}
+    openModal('addCourseFormModal')
+  {% endif %}
+
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchCourseInput");
+    const tableRows = document.querySelectorAll("table tbody tr");
+
+    searchInput.addEventListener("keyup", function () {
+      const query = this.value.toLowerCase().trim();
+
+      tableRows.forEach(row => {
+        const courseNameCell = row.querySelector("td:nth-child(2)");
+        if (!courseNameCell) return;
+
+        const text = courseNameCell.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? "" : "none";
+      });
+    });
+  });
+</script>
+
+{% endblock %}

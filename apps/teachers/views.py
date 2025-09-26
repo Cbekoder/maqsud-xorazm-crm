@@ -229,7 +229,11 @@ class TeacherLessonDetailView(RoleAccessMixin, View):
         return url
 
     def get(self, request, pk):
+        if not Lesson.objects.filter(pk=pk, group__teacher_groups__teacher=request.user).exists():
+            raise Http404
+
         lesson = get_object_or_404(Lesson, pk=pk)
+
         context = {
             "lesson": lesson,
             "class_materials": lesson.class_materials.all(),
@@ -239,7 +243,6 @@ class TeacherLessonDetailView(RoleAccessMixin, View):
 
         if lesson.lesson_video_url:
             context["lesson_video_url_embed"] = self.convert_to_embed(lesson.lesson_video_url)
-            print(context["lesson_video_url_embed"])
 
         for class_material in context["class_materials"]:
             class_material.file_name = os.path.basename(class_material.material.name)
@@ -313,13 +316,11 @@ class TeacherClassworkMarkingView(RoleAccessMixin, View):
             grade_qs = (ActivityGrade.objects
                         .filter(lesson__group__teacher_groups__teacher=request.user)
                         .order_by("lesson__group__name"))
-        elif teacher_groups.filter(group__name=group_query).exists():
-            grade_qs = (ActivityGrade.objects
-                        .filter(lesson__group__teacher_groups__teacher=request.user, lesson__group__name=group_query)
-                        .order_by("lesson__group__name"))
+        elif not teacher_groups.filter(group__name=group_query).exists():
+            raise Http404
         else:
             grade_qs = (ActivityGrade.objects
-                        .filter(lesson__group__teacher_groups__teacher=request.user)
+                        .filter(lesson__group__teacher_groups__teacher=request.user, lesson__group__name=group_query)
                         .order_by("lesson__group__name"))
 
         context["grade_qs"] = grade_qs

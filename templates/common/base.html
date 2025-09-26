@@ -1,6 +1,6 @@
 <!doctype html>
 {% load static %}
-<html lang="en" data-bs-theme="blue-theme">
+<html lang="en" data-bs-theme="light-theme">
 
 <head>
     <meta charset="utf-8">
@@ -550,10 +550,27 @@
         {% elif USER.role == 'manager' %}
             <ul class="metismenu" id="sidenav">
                 <li>
-                    <a href="/">
-                        <div class="parent-icon"><i class="material-icons-outlined">schedule</i></div>
-                        <div class="menu-title">Dars jadvali</div>
+                    <a href="{% url 'manager_course_list' %}">
+                        <div class="parent-icon"><i class="material-icons-outlined">school</i></div>
+                        <div class="menu-title">Kurslar</div>
                     </a>
+                </li>
+                <li>
+                    <a class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">admin_panel_settings</i></div>
+                        <div class="menu-title">Foydalanuvchilar</div>
+                    </a>
+                    <ul>
+                        <li>
+                            <a>O'qituvchilar</a>
+                        </li>
+                        <li>
+                            <a>O'quvchilar</a>
+                        </li>
+                        <li>
+                            <a>Ota-Onalar</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="/">
@@ -564,7 +581,7 @@
                 <li>
                     <a href="/">
                         <div class="parent-icon"><i class="material-icons-outlined">school</i></div>
-                        <div class="menu-title">O'zlashtirish</div>
+                        <div class="menu-title">Darslar</div>
                     </a>
                 </li>
                 <li>
@@ -575,18 +592,13 @@
                     <ul>
                       <li>
                           <a href="{% url 'manager_all_groups' %}">
-                              Guruhlar
+                              <div class="parent-icon"><i class="material-icons-outlined">groups</i></div>
+                              <div class="menu-title">Guruhlar</div>
                           </a>
                       </li>
                       <li><a href="#"><i class="material-icons-outlined">folder</i>Davomat hisoboti</a>
                       </li>
                     </ul>
-                </li>
-                <li>
-                    <a href="/">
-                        <div class="parent-icon"><i class="material-icons-outlined">admin_panel_settings</i></div>
-                        <div class="menu-title">Xodimlar</div>
-                    </a>
                 </li>
             </ul>
 

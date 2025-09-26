@@ -201,7 +201,13 @@
               {% csrf_token %}
               <div class="col-md-12">
                 <label for="input1" class="form-label">Mavzu</label>
-                <input type="text" class="form-control" id="input1" name="topic" placeholder="Mavzu" value="{{ lesson.topic }}">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="input1"
+                        name="topic"
+                        placeholder="Mavzu"
+                        value="{% if lesson.topic %}{{ lesson.topic }}{% endif %}">
               </div>
               <div class="col-md-12">
                 <label for="cw-file-upload" class="form-label">Uyga Vazifa Materiallari</label>
@@ -213,7 +219,12 @@
               </div>
               <div class="col-md-12">
                 <label for="video-url" class="form-label">Video havolasi</label>
-                <input type="text" class="form-control" id="video-url" name="video_url" placeholder="Video havolasi" value="{{ lesson.lesson_video_url }}">
+                <input type="text"
+                       class="form-control"
+                       id="video-url"
+                       name="video_url"
+                       placeholder="Video havolasi"
+                       value="{% if lesson.lesson_video_url %}{{ lesson.lesson_video_url }}{% endif %}">
               </div>
 
               <div class="col-md-12">
